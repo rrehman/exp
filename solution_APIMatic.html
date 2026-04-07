@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maxio – Advanced Billing Developer Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Backgrounds */
+      --color-bg-primary:    #ffffff;
+      --color-bg-secondary:  #f9fafe;
+      --color-bg-tertiary:   #f5f7f8;
+
+      /* Text */
+      --color-text-primary:   #3e445d;
+      --color-text-secondary: #606e8a;
+      --color-text-muted:     #999fb7;
+      --color-text-link:      #0062ff;
+
+      /* Borders */
+      --color-border-subtle:  #e7e9f2;
+      --color-border-default: #ced2e2;
+
+      /* Brand / Primary */
+      --color-primary:        #0080ff;
+      --color-primary-50:     #0080ff80;
+      --color-primary-10:     #0080ff1a;
+      --color-primary-alt:    #0c7ff2;
+
+      /* Secondary */
+      --color-secondary-20:   #0a1e4933;
+      --color-secondary-10:   #0a1e491a;
+
+      /* Semantic */
+      --color-error:    #ff4451;
+      --color-success:  #29a746;
+      --color-warning:  #ea732f;
+      --color-info:     #0062ff;
+
+      /* Dark surfaces (code blocks) */
+      --color-surface-dark:  #282d44;
+      --color-code-header:   #212426;
+      --color-black-cta:     #020000;
+
+      /* Typography */
+      --font-family: 'Inter', sans-serif;
+
+      /* Spacing */
+      --space-0:  0px;
+      --space-1:  4px;
+      --space-2:  8px;
+      --space-3:  12px;
+      --space-4:  16px;
+      --space-5:  20px;
+      --space-6:  24px;
+      --space-10: 40px;
+
+      /* Radius */
+      --radius-0: 0px;
+      --radius-1: 4px;
+      --radius-2: 8px;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: 14px;
+      color: var(--color-text-primary);
+      background: var(--color-bg-secondary);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ─── TOP HEADER ─────────────────────────────────────────── */
+    .top-header {
+      background: var(--color-bg-primary);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-5);
+      height: 48px;
+      flex-shrink: 0;
+      gap: var(--space-4);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--color-text-primary);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0;
+      flex-shrink: 0;
+    }
+    .header-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--color-border-subtle);
+    }
+    .portal-label {
+      color: var(--color-text-secondary);
+      font-size: 14px;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    /* ─── TOOLBAR ────────────────────────────────────────────── */
+    .toolbar {
+      background: var(--color-bg-primary);
+      border-bottom: 1px solid var(--color-border-subtle);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-5);
+      height: 44px;
+      flex-shrink: 0;
+      gap: var(--space-2);
+    }
+    .btn-sdk {
+      background: var(--color-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-1);
+      padding: var(--space-2) var(--space-4);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font-family);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 150ms ease;
+    }
+    .btn-sdk:hover { background: var(--color-primary-alt); }
+    .btn-outline {
+      background: var(--color-bg-primary);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-1);
+      padding: var(--space-2) var(--space-4);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font-family);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 150ms ease;
+    }
+    .btn-outline:hover { background: var(--color-bg-tertiary); }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-1);
+      padding: var(--space-2) 10px;
+      background: var(--color-bg-secondary);
+      color: var(--color-text-muted);
+      font-size: 14px;
+      font-family: var(--font-family);
+      cursor: text;
+      min-width: 180px;
+      transition: border-color 150ms ease;
+    }
+    .search-box:focus-within { border-color: var(--color-primary); }
+    .search-box kbd {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-1);
+      padding: 1px 5px;
+      font-size: 12px;
+      font-family: var(--font-family);
+      color: var(--color-text-muted);
+    }
+    .toolbar-spacer { flex: 1; }
+
+    /* ─── MAIN 3-COLUMN LAYOUT ───────────────────────────────── */
+    .layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ─── LEFT NAV ───────────────────────────────────────────── */
+    .left-nav {
+      width: 232px;
+      flex-shrink: 0;
+      background: var(--color-bg-secondary);
+      border-right: 1px solid var(--color-border-subtle);
+      overflow-y: auto;
+      padding: var(--space-3) 0;
+    }
+    .nav-section-label {
+      padding: 10px var(--space-4) var(--space-1);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+    }
+    .nav-group-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px var(--space-4);
+      cursor: pointer;
+      color: var(--color-text-primary);
+      font-weight: 500;
+      font-size: 14px;
+      user-select: none;
+      transition: background 150ms ease;
+    }
+    .nav-group-toggle:hover { background: var(--color-bg-tertiary); }
+    .nav-group-toggle svg { color: var(--color-text-muted); flex-shrink: 0; }
+    .nav-item {
+      display: block;
+      padding: 6px var(--space-4) 6px 28px;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: background 150ms ease, color 150ms ease;
+    }
+    .nav-item:hover { background: var(--color-bg-tertiary); color: var(--color-text-primary); }
+    .nav-item.active {
+      background: var(--color-primary-10);
+      color: var(--color-primary);
+      font-weight: 500;
+      border-right: 2px solid var(--color-primary);
+    }
+    .nav-built-tag {
+      display: block;
+      padding: var(--space-2) var(--space-4);
+      font-size: 12px;
+      color: var(--color-text-muted);
+      border-top: 1px solid var(--color-border-subtle);
+      margin-top: var(--space-2);
+    }
+
+    /* ─── CONTENT + CODE WRAPPER ─────────────────────────────── */
+    .content-code-wrapper {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ─── MAIN CONTENT ───────────────────────────────────────── */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-6) 32px;
+      min-width: 0;
+      background: var(--color-bg-primary);
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-5);
+    }
+    .breadcrumb a { color: var(--color-text-link); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb-sep { color: var(--color-border-default); }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 32px;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-2);
+    }
+    .page-subtitle {
+      font-size: 14px;
+      line-height: 22px;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-6);
+    }
+
+    /* Param section */
+    .param-section {
+      margin-bottom: var(--space-5);
+    }
+    .param-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 10px var(--space-4);
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-2) var(--radius-2) 0 0;
+      border-bottom: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background 150ms ease;
+    }
+    .param-header:hover { background: var(--color-bg-tertiary); }
+    .param-header-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--color-text-primary);
+    }
+    .param-header-meta {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      font-family: var(--font-family);
+    }
+    .tag-required {
+      color: var(--color-error);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .param-body {
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 0 0 var(--radius-2) var(--radius-2);
+      padding: var(--space-4);
+      background: var(--color-bg-primary);
+    }
+    .param-description {
+      font-size: 14px;
+      line-height: 22px;
+      color: var(--color-text-secondary);
+    }
+
+    /* Body section header */
+    .body-section-header { margin-bottom: var(--space-3); }
+    .body-header-main {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: 5px;
+    }
+    .body-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+    .tag-required-inline {
+      color: var(--color-error);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .view-json-btn {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-1);
+      color: var(--color-text-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px var(--space-2);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: var(--font-family);
+      transition: border-color 150ms, color 150ms;
+    }
+    .view-json-btn:hover { border-color: var(--color-border-default); color: var(--color-text-primary); }
+    .body-header-sub {
+      padding-left: 22px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Field item layout inside field-row-header */
+    .field-item-name-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-1);
+    }
+    .field-item-type-row { margin-bottom: var(--space-2); }
+    .field-item-desc {
+      font-size: 14px;
+      line-height: 22px;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-3);
+    }
+    .field-item-input-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding-top: var(--space-2);
+      border-top: 1px solid var(--color-border-subtle);
+    }
+    .field-item-checkbox {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--color-primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .field-item-input-label {
+      font-size: 13px;
+      color: var(--color-text-primary);
+    }
+
+    /* ─── FIELD ROW ──────────────────────────────────────────── */
+    .field-row {
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-2);
+      margin-bottom: var(--space-2);
+      background: var(--color-bg-tertiary);
+      overflow: hidden;
+    }
+    .field-row-header {
+      padding: var(--space-4);
+      background: #f7f7f9;
+    }
+    .field-name {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+    .field-type-link {
+      font-family: var(--font-family);
+      font-size: 12px;
+      color: var(--color-text-link);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      border-bottom: 1px dashed var(--color-text-link);
+      transition: all 150ms ease;
+    }
+    .field-type-link:hover { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+    .field-type-link.expanded {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+    .field-type-plain {
+      font-family: var(--font-family);
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      background: var(--color-bg-tertiary);
+      padding: 2px var(--space-2);
+      border-radius: var(--radius-1);
+    }
+    .field-desc {
+      font-size: 14px;
+      line-height: 22px;
+      color: var(--color-text-secondary);
+      flex: 1;
+    }
+    .expand-icon {
+      transition: transform 200ms ease;
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .expand-icon.open { transform: rotate(90deg); }
+
+    /* ─── INLINE EXPANSION PANELS ────────────────────────────── */
+    .inline-expansion {
+      display: none;
+      padding: var(--space-3) var(--space-4) var(--space-4);
+    }
+    .inline-expansion.visible { display: block; }
+
+    /* Level 1 — CouponRequest */
+    .expansion-l1 {
+      background: #f7f7f9;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-1);
+      padding: var(--space-4);
+    }
+    /* Level 2 — CouponPayload */
+    .expansion-l2 {
+      background: #f0f1f5;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-1);
+      padding: var(--space-4);
+      margin-top: var(--space-2);
+    }
+    /* Level 3 — CouponPayloadPercentage */
+    .expansion-l3 {
+      background: #eaebf0;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-1);
+      padding: var(--space-3) var(--space-4);
+      margin-top: var(--space-2);
+    }
+
+    .expansion-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+    .expansion-badge {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px var(--space-2);
+      border-radius: var(--radius-1);
+      letter-spacing: 0;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    .badge-l1 { background: var(--color-primary-10); color: var(--color-primary); }
+    .badge-l2 { background: var(--color-bg-tertiary); color: var(--color-text-secondary); }
+    .badge-l3 { background: var(--color-bg-tertiary); color: var(--color-text-secondary); }
+
+    .expansion-class-name {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    .expansion-close {
+      margin-left: 0;
+      background: none;
+      border: 1px solid var(--color-border-subtle);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border-radius: var(--radius-1);
+      flex-shrink: 0;
+      transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+    }
+    .expansion-close:hover {
+      background: var(--color-border-subtle);
+      border-color: var(--color-border-default);
+      color: var(--color-text-primary);
+    }
+
+    .expansion-fields-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-2);
+    }
+
+    /* mini field rows inside expansions */
+    .mini-field-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-1);
+      background: var(--color-bg-primary);
+      margin-bottom: var(--space-1);
+    }
+    .mini-field-name {
+      font-family: var(--font-family);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      min-width: 100px;
+    }
+    .mini-field-desc {
+      font-size: 12px;
+      line-height: 20px;
+      color: var(--color-text-secondary);
+      flex: 1;
+    }
+
+    /* Cases section */
+    .cases-section { margin-top: var(--space-3); }
+    .cases-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-2);
+    }
+    .case-item {
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-1);
+      background: var(--color-bg-primary);
+      margin-bottom: var(--space-1);
+      overflow: hidden;
+    }
+    .case-item-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+    }
+    .case-type-label { font-size: 12px; color: var(--color-text-muted); }
+    .case-type-value {
+      font-family: var(--font-family);
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--color-bg-tertiary);
+      padding: 2px var(--space-2);
+      border-radius: var(--radius-1);
+      color: var(--color-text-secondary);
+    }
+    .case-btn {
+      margin-left: auto;
+      font-size: 12px;
+      font-family: var(--font-family);
+      background: var(--color-bg-primary);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-1);
+      padding: 3px var(--space-2);
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      transition: background 150ms ease;
+    }
+    .case-btn + .case-btn { margin-left: var(--space-1); }
+    .case-btn:hover { background: var(--color-bg-tertiary); }
+
+    /* ─── CODE PANEL ─────────────────────────────────────────── */
+    .code-panel {
+      width: 380px;
+      flex-shrink: 0;
+      background: var(--color-surface-dark);
+      border-left: 1px solid rgba(255,255,255,0.06);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-lang-tabs {
+      display: flex;
+      align-items: center;
+      background: var(--color-code-header);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 6px;
+      gap: 2px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .lang-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 8px 9px 6px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--font-family);
+      transition: all 150ms ease;
+      white-space: nowrap;
+    }
+    .lang-tab:hover { color: #94a3b8; }
+    .lang-tab.active { color: #e2e8f0; border-bottom-color: var(--color-primary); }
+    .lang-tab svg { width: 16px; height: 16px; }
+
+    /* individual code block sections in the panel */
+    .code-section {
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .code-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-2) var(--space-4);
+      background: var(--color-code-header);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .code-section-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .code-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-l0 { background: var(--color-primary); }
+    .dot-l1 { background: #29a746; }
+    .dot-l2 { background: #0080ff; }
+    .dot-l3 { background: #999fb7; }
+
+    .code-section-tabs {
+      display: flex;
+      gap: 2px;
+    }
+    .code-sub-tab {
+      font-size: 12px;
+      font-family: var(--font-family);
+      padding: 3px var(--space-2);
+      border-radius: var(--radius-1);
+      cursor: pointer;
+      color: #64748b;
+      border: 1px solid transparent;
+      transition: all 150ms ease;
+    }
+    .code-sub-tab.active {
+      color: #e2e8f0;
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .code-sub-tab:hover:not(.active) { color: #94a3b8; }
+
+    pre {
+      padding: var(--space-4);
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 12px;
+      line-height: 1.65;
+      color: #e2e8f0;
+      overflow-x: auto;
+      background: transparent;
+      white-space: pre;
+    }
+
+    /* syntax colors */
+    .kw  { color: #c792ea; }
+    .cl  { color: #82aaff; }
+    .st  { color: #c3e88d; }
+    .cm  { color: #546e7a; }
+    .nu  { color: #f78c6c; }
+    .fn  { color: #82aaff; }
+    .ky  { color: #89ddff; }
+    .vl  { color: #c3e88d; }
+    .nb  { color: #f78c6c; }
+    .bo  { color: #ff9cac; }
+
+    /* collapsed code section */
+    .code-section.collapsed pre { display: none; }
+    .code-section-collapse-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border-radius: var(--radius-1);
+      flex-shrink: 0;
+      transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
+    }
+    .code-section-collapse-btn:hover { color: #e2e8f0; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+
+    /* empty state for hidden code sections */
+    .code-section.hidden { display: none; }
+
+    /* AI button */
+    .ai-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0,128,255,0.35);
+      color: #fff;
+      font-size: 18px;
+      z-index: 100;
+      transition: background 150ms ease;
+    }
+    .ai-fab:hover { background: var(--color-primary-alt); }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--color-border-default); border-radius: 3px; }
+    .code-panel ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); }
+
+    .expand-hint { display: none; }
+
+    /* animate expansions */
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .inline-expansion.visible { animation: slideDown 200ms ease; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOP HEADER ═══════════════════════════════════════════════ -->
+<header class="top-header">
+  <div class="logo">
+    <!-- Maxio snowflake icon -->
+    <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
+      <path d="M20 4v32M4 20h32M8 8l24 24M32 8L8 32" stroke="#00b388" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="20" cy="4" r="3" fill="#00b388"/>
+      <circle cx="20" cy="36" r="3" fill="#00b388"/>
+      <circle cx="4" cy="20" r="3" fill="#00b388"/>
+      <circle cx="36" cy="20" r="3" fill="#00b388"/>
+      <circle cx="8" cy="8" r="2.5" fill="#00b388"/>
+      <circle cx="32" cy="32" r="2.5" fill="#00b388"/>
+      <circle cx="32" cy="8" r="2.5" fill="#00b388"/>
+      <circle cx="8" cy="32" r="2.5" fill="#00b388"/>
+    </svg>
+    MAXIO
+  </div>
+  <div class="header-divider"></div>
+  <span class="portal-label">Advanced Billing Developer Portal</span>
+</header>
+
+<!-- ═══ TOOLBAR ══════════════════════════════════════════════════ -->
+<div class="toolbar">
+  <button class="btn-sdk">Get SDK</button>
+  <button class="btn-outline">API Spec</button>
+  <div class="search-box">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Search
+    <kbd>⌘K</kbd>
+  </div>
+</div>
+
+<!-- ═══ THREE-COLUMN LAYOUT ══════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- LEFT NAV -->
+  <nav class="left-nav">
+    <div class="nav-group-toggle">
+      Advance Invoice
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div class="nav-group-toggle">
+      Billing Portal
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+
+    <div class="nav-group-toggle" style="color: var(--color-primary); font-weight:600;">
+      Coupons
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 9-7 7-7-7"/></svg>
+    </div>
+    <a class="nav-item" href="#">Overview</a>
+    <a class="nav-item active" href="#">Create Coupon</a>
+    <a class="nav-item" href="#">List Coupons for Product Family</a>
+    <a class="nav-item" href="#">Find Coupon</a>
+    <a class="nav-item" href="#">Read Coupon</a>
+    <a class="nav-item" href="#">Update Coupon</a>
+    <a class="nav-item" href="#">Archive Coupon</a>
+    <a class="nav-item" href="#">List Coupons</a>
+    <a class="nav-item" href="#">Read Coupon Usage</a>
+    <a class="nav-item" href="#">Validate Coupon</a>
+    <a class="nav-item" href="#">Create or Update Coupon</a>
+
+    <div class="nav-group-toggle">
+      Coupon Currency
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div class="nav-group-toggle">
+      Coupon Subcodes
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div class="nav-group-toggle">
+      Coupon Usage
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+
+    <span class="nav-built-tag">Built with APIMatic</span>
+  </nav>
+
+  <!-- CONTENT + CODE -->
+  <div class="content-code-wrapper">
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="mainContent">
+
+      <div class="breadcrumb">
+        <a href="#">Advanced Billing API</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>Coupons</span>
+        <span class="breadcrumb-sep">›</span>
+        <span>Create Coupon</span>
+      </div>
+
+      <h1 class="page-title">API Code Playground</h1>
+      <p class="page-subtitle">Create a coupon by passing the coupon payload in the request body.</p>
+
+      <!-- productFamilyId param -->
+      <div class="param-section">
+        <div class="param-header">
+          <span class="param-header-name">productFamilyId</span>
+          <span class="tag-required">required</span>
+          <span class="param-header-meta">int · Template</span>
+        </div>
+        <div class="param-body">
+          <p class="param-description">The Advanced Billing id of the product family to which the coupon belongs.</p>
+          <div style="margin-top:var(--space-2); padding:6px 10px; background:var(--color-bg-secondary); border:1px solid var(--color-border-subtle); border-radius:var(--radius-1); font-size:12px; color:var(--color-text-primary);">140</div>
+        </div>
+      </div>
+
+      <!-- Body section -->
+      <div style="margin-bottom: var(--space-5);">
+        <div class="body-section-header">
+          <div class="body-header-main">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--color-text-secondary);flex-shrink:0;"><path d="m19 9-7 7-7-7"/></svg>
+            <span class="body-label">body</span>
+            <span class="tag-required-inline">REQUIRED</span>
+            <button class="view-json-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              VIEW JSON
+            </button>
+          </div>
+          <div class="body-header-sub">
+            <span style="color:var(--color-text-link);font-size:13px;font-weight:500;">CouponRequest</span>
+            <span style="color:var(--color-text-muted);margin:0 3px;">·</span>
+            <span style="color:var(--color-text-secondary);font-size:13px;">Body</span>
+          </div>
+        </div>
+
+        <!-- coupon field row — Level 0 -->
+        <div class="field-row" id="fieldCoupon">
+          <div class="field-row-header">
+            <div class="field-item-name-row">
+              <span class="field-name">coupon</span>
+              <svg class="expand-icon" id="iconCoupon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+            <div class="field-item-type-row">
+              <a class="field-type-link" id="linkCouponRequest" onclick="toggleL1(event)">
+                CouponRequest
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+            </div>
+            <p class="field-item-desc">Required when creating a new coupon. This name is not displayed to customers and is limited to 255 characters.</p>
+            <div class="field-item-input-row">
+              <input type="checkbox" class="field-item-checkbox" checked />
+              <span class="field-item-input-label">coupon</span>
+            </div>
+          </div>
+
+          <!-- ── LEVEL 1: CouponRequest expansion ── -->
+          <div class="inline-expansion" id="expansionL1">
+            <div class="expansion-l1">
+              <div class="expansion-title">
+                <button class="expansion-close" onclick="collapseL1()" title="Collapse"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg></button>
+                                <span class="expansion-class-name">CouponRequest</span>
+              </div>
+
+              <div class="expansion-fields-label">Fields</div>
+
+              <!-- coupon field inside CouponRequest -->
+              <div class="mini-field-row" style="flex-direction:column; gap:var(--space-1);">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="mini-field-name">coupon</span>
+                  <a class="field-type-link" id="linkCouponPayload" onclick="toggleL2(event)">
+                    CouponPayload
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+                  </a>
+                  <span class="expand-hint" style="opacity:1;">Click to expand inline</span>
+                </div>
+
+                <!-- ── LEVEL 2: CouponPayload expansion ── -->
+                <div class="inline-expansion" id="expansionL2">
+                  <div class="expansion-l2">
+                    <div class="expansion-title">
+                      <button class="expansion-close" onclick="collapseL2()" title="Collapse"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg></button>
+                                            <span class="expansion-class-name">CouponPayload</span>
+                    </div>
+
+                    <div class="expansion-fields-label">Fields</div>
+
+                    <div class="mini-field-row">
+                      <span class="mini-field-name">name</span>
+                      <span class="field-type-plain">string</span>
+                      <span class="mini-field-desc">Required when creating a new coupon. This name is not displayed to customers and is limited to 255 characters.</span>
+                    </div>
+                    <div class="mini-field-row">
+                      <span class="mini-field-name">code</span>
+                      <span class="field-type-plain">string</span>
+                      <span class="mini-field-desc">Required when creating a new coupon. Limited to 255 characters. May contain alphanumeric characters and special characters.</span>
+                    </div>
+                    <div class="mini-field-row">
+                      <span class="mini-field-name">description</span>
+                      <span class="field-type-plain">string</span>
+                      <span class="mini-field-desc">A description of the coupon that can be displayed to customers in transactions and on statements.</span>
+                    </div>
+                    <div class="mini-field-row">
+                      <span class="mini-field-name">percentage</span>
+                      <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+                        <a class="field-type-link" id="linkCouponPayloadPct" onclick="toggleL3(event)">
+                          CouponPayloadPercentage
+                          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+                        </a>
+                      </div>
+                    </div>
+
+                    <!-- ── LEVEL 3: CouponPayloadPercentage expansion ── -->
+                    <div class="inline-expansion" id="expansionL3">
+                      <div class="expansion-l3" style="margin-top:var(--space-2);">
+                        <div class="expansion-title">
+                          <button class="expansion-close" onclick="collapseL3()" title="Collapse"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg></button>
+                                                    <span class="expansion-class-name">CouponPayloadPercentage</span>
+                        </div>
+
+                        <div class="cases-section">
+                          <div class="cases-label">Cases</div>
+
+                          <div class="case-item">
+                            <div class="case-item-header">
+                              <span class="case-type-label">Type</span>
+                              <span class="case-type-value">string</span>
+                              <button class="case-btn">Method Signature</button>
+                              <button class="case-btn">Initialization Code</button>
+                            </div>
+                          </div>
+
+                          <div class="case-item">
+                            <div class="case-item-header">
+                              <span class="case-type-label">Type</span>
+                              <span class="case-type-value">double</span>
+                              <button class="case-btn">Method Signature</button>
+                              <button class="case-btn">Initialization Code</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /Level 3 -->
+
+                    <div class="mini-field-row" style="margin-top:2px;">
+                      <span class="mini-field-name">amount_in_cents</span>
+                      <span class="field-type-plain">long</span>
+                      <span class="mini-field-desc">The amount of the coupon in cents.</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Level 2 -->
+              </div>
+
+              <!-- RestrictedProducts field -->
+              <div class="mini-field-row">
+                <span class="mini-field-name">RestrictedProducts</span>
+                <span class="field-type-plain">Dictionary&lt;string, bool&gt;</span>
+                <span class="mini-field-desc">An object where the keys are product IDs or handles indicating if the coupon should be applicable to the product.</span>
+              </div>
+
+              <!-- RestrictedComponents field -->
+              <div class="mini-field-row">
+                <span class="mini-field-name">RestrictedComponents</span>
+                <span class="field-type-plain">Dictionary&lt;string, bool&gt;</span>
+                <span class="mini-field-desc">An object where the keys are component IDs or handles indicating if the coupon should be applicable to the component.</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Level 1 -->
+        </div>
+        <!-- /field-row -->
+
+      </div>
+      <!-- /body section -->
+
+    </main>
+
+    <!-- CODE PANEL -->
+    <aside class="code-panel" id="codePanel">
+
+      <!-- Language tabs -->
+      <div class="code-lang-tabs">
+        <div class="lang-tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 9l-3 3 3 3m8-6 3 3-3 3M14 6l-4 12"/></svg>
+          HTTP
+        </div>
+        <div class="lang-tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 8h10M7 12h10M7 16h6"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          Java
+        </div>
+        <div class="lang-tab active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h8M12 8v8"/></svg>
+          .NET
+        </div>
+        <div class="lang-tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6v12c0 1.6569 1.34315 3 3 3h8c1.6569 0 3-1.3431 3-3V8.625L13.5 3z"/></svg>
+          PHP
+        </div>
+        <div class="lang-tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 18.5 7 15V9l5-3 5 3v6l-5 3.5z"/></svg>
+          Python
+        </div>
+      </div>
+
+      <!-- CODE SECTION 0: API Request (always visible) -->
+      <div class="code-section" id="codeL0">
+        <div class="code-section-header">
+          <div class="code-section-label">
+            <span class="code-dot dot-l0"></span>
+            <span style="color:#94a3b8;">Create Coupon — Request</span>
+          </div>
+          <div class="code-section-tabs">
+            <span class="code-sub-tab active">Request Examples</span>
+            <span class="code-sub-tab">Percentage Coupon</span>
+          </div>
+        </div>
+        <pre><span class="kw">using</span> <span class="cl">AdvancedBilling.Standard</span>;
+<span class="kw">using</span> <span class="cl">AdvancedBilling.Standard.Controllers</span>;
+<span class="kw">using</span> <span class="cl">AdvancedBilling.Standard.Exceptions</span>;
+<span class="kw">using</span> <span class="cl">AdvancedBilling.Standard.Models</span>;
+<span class="kw">using</span> <span class="cl">AdvancedBilling.Standard.Models.Containers</span>;
+<span class="kw">using</span> System;
+<span class="kw">using</span> System.Collections.Generic;
+<span class="kw">using</span> System.Threading.Tasks;
+
+<span class="kw">namespace</span> TestConsoleProject
+<span class="kw">{</span>
+  <span class="kw">public class</span> <span class="cl">Program</span>
+  <span class="kw">{</span>
+    <span class="kw">static async</span> Task <span class="fn">Main</span>()
+    <span class="kw">{</span>
+      <span class="cl">AdvancedBillingClient</span> client =
+        <span class="kw">new</span> <span class="cl">AdvancedBillingClient</span>.Builder()
+          .<span class="fn">HttpClientConfig</span>(...)
+          .<span class="fn">Build</span>();
+
+      <span class="kw">var</span> couponPayload = <span class="cl">CouponPayload</span>
+        .<span class="fn">FromName</span>(<span class="st">"15% off"</span>);<span class="kw">
+    }</span>
+  <span class="kw">}</span>
+<span class="kw">}</span></pre>
+      </div>
+
+      <!-- CODE SECTION 1: CouponRequest schema (hidden until L1 expanded) -->
+      <div class="code-section hidden" id="codeL1">
+        <div class="code-section-header">
+          <div class="code-section-label">
+            <span class="code-dot dot-l1"></span>
+            <span style="color:#6ee7b7;">CouponRequest — Schema</span>
+          </div>
+          <button class="code-section-collapse-btn" onclick="collapseL1()" title="Collapse"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg></button>
+        </div>
+        <pre>{
+  <span class="ky">"coupon"</span>: {
+    <span class="ky">"name"</span>: <span class="vl">"name4"</span>,
+    <span class="ky">"code"</span>: <span class="vl">"code2"</span>,
+    <span class="ky">"description"</span>: <span class="vl">"descriptionA"</span>,
+    <span class="ky">"percentage"</span>: <span class="vl">"String2"</span>,
+    <span class="ky">"amount_in_cents"</span>: <span class="nb">238</span>
+  },
+  <span class="ky">"restricted_products"</span>: {
+    <span class="ky">"key0"</span>: <span class="bo">true</span>
+  },
+  <span class="ky">"restricted_components"</span>: {
+    <span class="ky">"key0"</span>: <span class="bo">true</span>
+  }
+}</pre>
+      </div>
+
+      <!-- CODE SECTION 2: CouponPayload schema (hidden until L2 expanded) -->
+      <div class="code-section hidden" id="codeL2">
+        <div class="code-section-header">
+          <div class="code-section-label">
+            <span class="code-dot dot-l2"></span>
+            <span style="color:#93c5fd;">CouponPayload — Schema</span>
+          </div>
+          <button class="code-section-collapse-btn" onclick="collapseL2()" title="Collapse"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg></button>
+        </div>
+        <pre>{
+  <span class="ky">"name"</span>: <span class="vl">"name8"</span>,
+  <span class="ky">"code"</span>: <span class="vl">"code6"</span>,
+  <span class="ky">"description"</span>: <span class="vl">"descriptionB"</span>,
+  <span class="ky">"percentage"</span>: <span class="vl">"String3"</span>,
+  <span class="ky">"amount_in_cents"</span>: <span class="nb">110</span>
+}</pre>
+      </div>
+
+      <!-- CODE SECTION 3: CouponPayloadPercentage (hidden until L3 expanded) -->
+      <div class="code-section hidden" id="codeL3">
+        <div class="code-section-header">
+          <div class="code-section-label">
+            <span class="code-dot dot-l3"></span>
+            <span style="color:#d8b4fe;">CouponPayloadPercentage — Utilization</span>
+          </div>
+          <button class="code-section-collapse-btn" onclick="collapseL3()" title="Collapse"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg></button>
+        </div>
+        <pre>value.<span class="fn">Match</span>&lt;<span class="cl">VoidType</span>&gt;(
+  mString: @case =&gt;
+  {
+    Console.<span class="fn">WriteLine</span>(@case);
+    <span class="kw">return null</span>;
+  },
+  precision: @case =&gt;
+  {
+    Console.<span class="fn">WriteLine</span>(@case);
+    <span class="kw">return null</span>;
+  }
+);</pre>
+      </div>
+
+    </aside>
+    <!-- /code panel -->
+
+  </div>
+  <!-- /content-code-wrapper -->
+
+</div>
+<!-- /layout -->
+
+<!-- AI FAB -->
+<button class="ai-fab" title="Ask AI">✦</button>
+
+<script>
+  // ── State ──────────────────────────────────────────────────────
+  let l1Open = false;
+  let l2Open = false;
+  let l3Open = false;
+
+  // ── Level 1: CouponRequest ─────────────────────────────────────
+  function toggleL1(e) {
+    e.preventDefault();
+    l1Open ? collapseL1() : expandL1();
+  }
+
+  function expandL1() {
+    l1Open = true;
+    document.getElementById('expansionL1').classList.add('visible');
+    document.getElementById('iconCoupon').classList.add('open');
+    document.getElementById('linkCouponRequest').classList.add('expanded');
+    document.getElementById('codeL1').classList.remove('hidden');
+
+    if (!l2Open) document.getElementById('codeL2').classList.add('hidden');
+    if (!l3Open) document.getElementById('codeL3').classList.add('hidden');
+
+    scrollCodeIntoView('codeL1');
+  }
+
+  function collapseL1() {
+    if (l2Open) collapseL2();
+    l1Open = false;
+    document.getElementById('expansionL1').classList.remove('visible');
+    document.getElementById('iconCoupon').classList.remove('open');
+    document.getElementById('linkCouponRequest').classList.remove('expanded');
+    document.getElementById('codeL1').classList.add('hidden');
+  }
+
+  // ── Level 2: CouponPayload ─────────────────────────────────────
+  function toggleL2(e) {
+    e.preventDefault();
+    l2Open ? collapseL2() : expandL2();
+  }
+
+  function expandL2() {
+    l2Open = true;
+    document.getElementById('expansionL2').classList.add('visible');
+    document.getElementById('linkCouponPayload').classList.add('expanded');
+    document.getElementById('codeL2').classList.remove('hidden');
+    scrollCodeIntoView('codeL2');
+  }
+
+  function collapseL2() {
+    if (l3Open) collapseL3();
+    l2Open = false;
+    document.getElementById('expansionL2').classList.remove('visible');
+    document.getElementById('linkCouponPayload').classList.remove('expanded');
+    document.getElementById('codeL2').classList.add('hidden');
+  }
+
+  // ── Level 3: CouponPayloadPercentage ──────────────────────────
+  function toggleL3(e) {
+    e.preventDefault();
+    l3Open ? collapseL3() : expandL3();
+  }
+
+  function expandL3() {
+    l3Open = true;
+    document.getElementById('expansionL3').classList.add('visible');
+    document.getElementById('linkCouponPayloadPct').classList.add('expanded');
+    document.getElementById('codeL3').classList.remove('hidden');
+    scrollCodeIntoView('codeL3');
+  }
+
+  function collapseL3() {
+    l3Open = false;
+    document.getElementById('expansionL3').classList.remove('visible');
+    document.getElementById('linkCouponPayloadPct').classList.remove('expanded');
+    document.getElementById('codeL3').classList.add('hidden');
+  }
+
+  // ── Scroll code panel to the new section ──────────────────────
+  function scrollCodeIntoView(sectionId) {
+    const panel = document.getElementById('codePanel');
+    const section = document.getElementById(sectionId);
+    if (panel && section) {
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  }
+</script>
+
+</body>
+</html>

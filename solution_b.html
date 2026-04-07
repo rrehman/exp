@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maxio – Advanced Billing Developer Portal — Option B</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Backgrounds */
+      --color-bg-primary:    #ffffff;
+      --color-bg-secondary:  #f9fafe;
+      --color-bg-tertiary:   #f5f7f8;
+
+      /* Text */
+      --color-text-primary:   #3e445d;
+      --color-text-secondary: #606e8a;
+      --color-text-muted:     #999fb7;
+      --color-text-link:      #0062ff;
+
+      /* Borders */
+      --color-border-subtle:  #e7e9f2;
+      --color-border-default: #ced2e2;
+
+      /* Brand / Primary */
+      --color-primary:        #0080ff;
+      --color-primary-50:     #0080ff80;
+      --color-primary-10:     #0080ff1a;
+      --color-primary-alt:    #0c7ff2;
+
+      /* Secondary */
+      --color-secondary-20:   #0a1e4933;
+      --color-secondary-10:   #0a1e491a;
+
+      /* Semantic */
+      --color-error:    #ff4451;
+      --color-success:  #29a746;
+      --color-warning:  #ea732f;
+      --color-info:     #0062ff;
+
+      /* Dark surfaces (code blocks) */
+      --color-surface-dark:  #282d44;
+      --color-code-header:   #212426;
+
+      /* Typography */
+      --font-family: 'Inter', sans-serif;
+
+      /* Spacing */
+      --space-1:  4px;
+      --space-2:  8px;
+      --space-3:  12px;
+      --space-4:  16px;
+      --space-5:  20px;
+      --space-6:  24px;
+
+      /* Radius */
+      --radius-1: 4px;
+      --radius-2: 8px;
+
+      /* Drawer */
+      --drawer-width: 580px;
+      --col-info-w:   54%;
+      --col-code-w:   46%;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: 14px;
+      color: var(--color-text-primary);
+      background: var(--color-bg-secondary);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ─── TOP HEADER ─────────────────────────────────────────── */
+    .top-header {
+      background: var(--color-bg-primary);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-5);
+      height: 48px;
+      flex-shrink: 0;
+      gap: var(--space-4);
+      border-bottom: 1px solid var(--color-border-subtle);
+      z-index: 200;
+      position: relative;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--color-text-primary);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0;
+      flex-shrink: 0;
+    }
+    .header-divider { width: 1px; height: 24px; background: var(--color-border-subtle); }
+    .portal-label { color: var(--color-text-secondary); font-size: 14px; font-weight: 400; white-space: nowrap; }
+
+    /* ─── TOOLBAR ────────────────────────────────────────────── */
+    .toolbar {
+      background: var(--color-bg-primary);
+      border-bottom: 1px solid var(--color-border-subtle);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-5);
+      height: 44px;
+      flex-shrink: 0;
+      gap: var(--space-2);
+      z-index: 200;
+      position: relative;
+    }
+    .btn-sdk {
+      background: var(--color-primary); color: #fff; border: none;
+      border-radius: var(--radius-1); padding: var(--space-2) var(--space-4);
+      font-size: 14px; font-weight: 500; font-family: var(--font-family); cursor: pointer;
+      transition: background 150ms ease;
+    }
+    .btn-sdk:hover { background: var(--color-primary-alt); }
+    .btn-outline {
+      background: var(--color-bg-primary); color: var(--color-text-primary);
+      border: 1px solid var(--color-border-default); border-radius: var(--radius-1);
+      padding: var(--space-2) var(--space-4); font-size: 14px; font-weight: 500;
+      font-family: var(--font-family); cursor: pointer; transition: background 150ms ease;
+    }
+    .btn-outline:hover { background: var(--color-bg-tertiary); }
+    .search-box {
+      display: flex; align-items: center; gap: 6px;
+      border: 1px solid var(--color-border-default); border-radius: var(--radius-1);
+      padding: var(--space-2) 10px; background: var(--color-bg-secondary);
+      color: var(--color-text-muted); font-size: 14px; font-family: var(--font-family);
+      cursor: text; min-width: 180px; transition: border-color 150ms ease;
+    }
+    .search-box kbd {
+      background: var(--color-bg-tertiary); border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-1); padding: 1px 5px; font-size: 12px;
+      font-family: var(--font-family); color: var(--color-text-muted);
+    }
+
+    /* ─── MAIN 3-COLUMN LAYOUT ───────────────────────────────── */
+    .layout { display: flex; flex: 1; overflow: hidden; position: relative; }
+
+    /* ─── LEFT NAV ───────────────────────────────────────────── */
+    .left-nav {
+      width: 232px; flex-shrink: 0; background: var(--color-bg-secondary);
+      border-right: 1px solid var(--color-border-subtle);
+      overflow-y: auto; padding: var(--space-3) 0;
+      z-index: 100; position: relative;
+    }
+    .nav-group-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px var(--space-4); cursor: pointer;
+      color: var(--color-text-primary); font-weight: 500;
+      font-size: 14px; user-select: none;
+      transition: background 150ms ease;
+    }
+    .nav-group-toggle:hover { background: var(--color-bg-tertiary); }
+    .nav-group-toggle svg { color: var(--color-text-muted); flex-shrink: 0; }
+    .nav-item {
+      display: block; padding: 6px var(--space-4) 6px 28px;
+      font-size: 14px; color: var(--color-text-secondary);
+      cursor: pointer; text-decoration: none;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: background 150ms ease, color 150ms ease;
+    }
+    .nav-item:hover { background: var(--color-bg-tertiary); color: var(--color-text-primary); }
+    .nav-item.active {
+      background: var(--color-primary-10); color: var(--color-primary);
+      font-weight: 500; border-right: 2px solid var(--color-primary);
+    }
+    .nav-built-tag {
+      display: block; padding: var(--space-2) var(--space-4);
+      font-size: 12px; color: var(--color-text-muted);
+      border-top: 1px solid var(--color-border-subtle); margin-top: var(--space-2);
+    }
+
+    /* ─── MAIN CONTENT AREA ──────────────────────────────────── */
+    .content-code-wrapper {
+      flex: 1; display: flex; overflow: hidden; position: relative;
+    }
+
+    .main-content {
+      flex: 1; overflow-y: auto; padding: var(--space-6) 32px; min-width: 0;
+      background: var(--color-bg-primary);
+      transition: filter 0.3s ease;
+    }
+    .main-content.dimmed { filter: brightness(0.94); pointer-events: none; }
+
+    .breadcrumb {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--color-text-secondary); margin-bottom: var(--space-5);
+    }
+    .breadcrumb a { color: var(--color-text-link); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb-sep { color: var(--color-border-default); }
+
+    .page-title { font-size: 24px; font-weight: 600; line-height: 32px; color: var(--color-text-primary); margin-bottom: var(--space-2); }
+    .page-subtitle { font-size: 14px; line-height: 22px; color: var(--color-text-secondary); margin-bottom: var(--space-6); }
+
+    .param-section { margin-bottom: var(--space-5); }
+    .param-header {
+      display: flex; align-items: center; gap: var(--space-2);
+      padding: 10px var(--space-4); background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-2) var(--radius-2) 0 0; border-bottom: none;
+      transition: background 150ms ease;
+    }
+    .param-header:hover { background: var(--color-bg-tertiary); }
+    .param-header-name { font-weight: 600; font-size: 14px; color: var(--color-text-primary); }
+    .param-header-meta { font-size: 12px; color: var(--color-text-secondary); }
+    .tag-required {
+      background: #ff44511a; color: var(--color-error); font-size: 12px;
+      font-weight: 500; padding: 2px var(--space-2); border-radius: var(--radius-1);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .param-body {
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 0 0 var(--radius-2) var(--radius-2);
+      padding: var(--space-4); background: var(--color-bg-primary);
+    }
+    .param-description { font-size: 14px; line-height: 22px; color: var(--color-text-secondary); }
+
+    .section-toggle { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); }
+    .section-toggle-checkbox { width: 16px; height: 16px; accent-color: var(--color-primary); }
+    .section-toggle-label { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+    .section-toggle-type { font-size: 12px; color: var(--color-text-secondary); }
+
+    /* field rows in main content */
+    .field-row {
+      border: 1px solid var(--color-border-subtle); border-radius: var(--radius-2);
+      margin-bottom: var(--space-2); background: var(--color-bg-primary); overflow: hidden;
+    }
+    .field-row-header {
+      display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-3) var(--space-4);
+    }
+    .field-name {
+      font-family: var(--font-family);
+      font-size: 14px; font-weight: 500; color: var(--color-text-primary); min-width: 120px;
+    }
+    .field-desc { font-size: 14px; line-height: 22px; color: var(--color-text-secondary); flex: 1; }
+    .field-type-plain {
+      font-family: var(--font-family); font-size: 12px; color: var(--color-text-secondary);
+      background: var(--color-bg-tertiary); padding: 2px var(--space-2); border-radius: var(--radius-1);
+    }
+
+    /* type link — triggers drawer */
+    .type-link {
+      font-family: var(--font-family);
+      font-size: 12px; color: var(--color-text-link);
+      cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: var(--space-1);
+      border-bottom: 1px dashed var(--color-text-link);
+      transition: all 150ms ease;
+    }
+    .type-link:hover { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+    .type-link.active { color: var(--color-primary); border-bottom: 1px solid var(--color-primary); }
+    .drawer-hint {
+      font-size: 12px; color: var(--color-primary); background: var(--color-primary-10);
+      border: 1px solid var(--color-primary-50); padding: 2px var(--space-2); border-radius: var(--radius-1);
+      font-weight: 500; margin-left: var(--space-1); opacity: 0;
+      transition: opacity 150ms ease; white-space: nowrap;
+    }
+    .field-row:hover .drawer-hint { opacity: 1; }
+
+    /* ─── MAIN CODE PANEL (shown when drawer is closed) ─────── */
+    .main-code-panel {
+      width: 380px; flex-shrink: 0;
+      background: var(--color-surface-dark); border-left: 1px solid rgba(255,255,255,0.06);
+      overflow-y: auto; display: flex; flex-direction: column;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+                  opacity 0.35s ease;
+    }
+    .main-code-panel.pushed {
+      transform: translateX(20px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .code-lang-tabs {
+      display: flex; align-items: center;
+      background: var(--color-code-header); border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 6px; gap: 2px; flex-shrink: 0;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .lang-tab {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 8px 9px 6px; cursor: pointer;
+      border-bottom: 2px solid transparent;
+      color: #64748b; font-size: 12px; font-weight: 500; font-family: var(--font-family);
+      transition: all 150ms ease;
+    }
+    .lang-tab:hover { color: #94a3b8; }
+    .lang-tab.active { color: #e2e8f0; border-bottom-color: var(--color-primary); }
+    .lang-tab svg { width: 16px; height: 16px; }
+
+    pre {
+      padding: var(--space-4);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px; line-height: 1.65;
+      color: #e2e8f0; overflow-x: auto; white-space: pre;
+    }
+    .kw  { color: #c792ea; }
+    .cl  { color: #82aaff; }
+    .st  { color: #c3e88d; }
+    .nu  { color: #f78c6c; }
+    .fn  { color: #82aaff; }
+    .ky  { color: #89ddff; }
+    .vl  { color: #c3e88d; }
+    .nb  { color: #f78c6c; }
+    .bo  { color: #ff9cac; }
+    .cm  { color: #546e7a; }
+
+    /* ─── DRAWER OVERLAY ─────────────────────────────────────── */
+    .drawer-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(62,68,93,0.2);
+      backdrop-filter: blur(1px);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .drawer-overlay.visible { opacity: 1; pointer-events: auto; }
+
+    /* ─── DRAWER PANEL ───────────────────────────────────────── */
+    .drawer {
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: var(--drawer-width);
+      background: var(--color-bg-primary);
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -8px 0 40px rgba(62,68,93,0.12);
+    }
+    .drawer.open { transform: translateX(0); }
+
+    /* Breadcrumb trail (Miller Column header) */
+    .drawer-trail {
+      display: flex;
+      align-items: center;
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border-subtle);
+      padding: 0;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .trail-close-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: none; border: none; border-right: 1px solid var(--color-border-subtle);
+      cursor: pointer; color: var(--color-text-secondary);
+      transition: background 150ms ease, color 150ms ease;
+    }
+    .trail-close-btn:hover { background: var(--color-bg-tertiary); color: var(--color-text-primary); }
+
+    .trail-steps {
+      display: flex; align-items: center;
+      padding: 0 var(--space-2); gap: 0; flex: 1; overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .trail-steps::-webkit-scrollbar { display: none; }
+
+    .trail-step {
+      display: flex; align-items: center; gap: 0;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .trail-step-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 10px 10px;
+      background: none; border: none; cursor: pointer;
+      font-size: 12px; color: var(--color-text-secondary);
+      border-radius: var(--radius-1); transition: all 150ms ease;
+      font-family: var(--font-family);
+    }
+    .trail-step-btn:hover { background: var(--color-primary-10); color: var(--color-text-primary); }
+    .trail-step-btn.current { color: var(--color-text-primary); font-weight: 600; cursor: default; }
+    .trail-step-btn.current:hover { background: none; }
+    .trail-step-badge {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .badge-l1 { background: var(--color-success); }
+    .badge-l2 { background: var(--color-primary); }
+    .badge-l3 { background: var(--color-text-muted); }
+    .trail-sep {
+      color: var(--color-border-default); font-size: 13px; flex-shrink: 0; margin: 0 -2px;
+    }
+
+    /* Drawer body: slides panels horizontally */
+    .drawer-panels-viewport {
+      flex: 1; overflow: hidden; position: relative;
+    }
+
+    .drawer-panels-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    /* Each panel = full drawer width, split: info (left) | code (right) */
+    .drawer-panel {
+      width: var(--drawer-width);
+      height: 100%;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+    }
+
+    /* Left: type info */
+    .panel-info {
+      width: var(--col-info-w);
+      overflow-y: auto;
+      padding: 18px 18px 18px 20px;
+      border-right: 1px solid var(--color-border-subtle);
+    }
+
+    .panel-type-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.06em; padding: 3px var(--space-2); border-radius: var(--radius-1);
+      margin-bottom: var(--space-2);
+    }
+    .tag-model { background: var(--color-primary-10); color: var(--color-primary); }
+    .tag-oneof { background: var(--color-bg-tertiary); color: var(--color-text-secondary); }
+
+    .panel-class-name {
+      font-family: var(--font-family);
+      font-size: 16px; font-weight: 600; color: var(--color-text-primary);
+      margin-bottom: var(--space-4);
+    }
+
+    .panel-fields-label {
+      font-size: 12px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--color-text-muted); margin-bottom: var(--space-2);
+    }
+
+    .panel-field {
+      padding: 9px 10px;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-1); background: var(--color-bg-secondary);
+      margin-bottom: var(--space-1); cursor: default;
+    }
+    .panel-field.clickable { cursor: pointer; transition: background 150ms ease, border-color 150ms ease; }
+    .panel-field.clickable:hover { background: var(--color-primary-10); border-color: var(--color-primary-50); }
+    .panel-field.selected { background: var(--color-primary-10); border-color: var(--color-primary-50); }
+
+    .panel-field-top {
+      display: flex; align-items: center; gap: var(--space-2); margin-bottom: 3px;
+    }
+    .panel-field-name {
+      font-family: var(--font-family);
+      font-size: 12px; font-weight: 500; color: var(--color-text-primary);
+    }
+    .panel-field-link {
+      font-family: var(--font-family);
+      font-size: 12px; color: var(--color-text-link);
+      display: inline-flex; align-items: center; gap: 3px;
+      border-bottom: 1px dashed var(--color-text-link);
+      transition: color 150ms ease;
+    }
+    .panel-field-link.drilled { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+    .panel-field-desc {
+      font-size: 12px; line-height: 20px; color: var(--color-text-secondary);
+    }
+    .panel-field-arrow {
+      margin-left: auto; color: var(--color-text-muted); flex-shrink: 0;
+      transition: transform 150ms ease, color 150ms ease;
+    }
+    .panel-field.clickable:hover .panel-field-arrow { transform: translateX(2px); color: var(--color-primary); }
+    .panel-field.selected .panel-field-arrow { color: var(--color-primary); }
+
+    /* Cases (for OneOf) */
+    .cases-label {
+      font-size: 12px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--color-text-muted);
+      margin-bottom: var(--space-2); margin-top: var(--space-4);
+    }
+    .case-item {
+      border: 1px solid var(--color-border-subtle); border-radius: var(--radius-1);
+      background: var(--color-bg-secondary); margin-bottom: var(--space-1); overflow: hidden;
+    }
+    .case-item-header {
+      display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3);
+    }
+    .case-type-label { font-size: 12px; color: var(--color-text-muted); }
+    .case-type-value {
+      font-family: var(--font-family); font-size: 12px; font-weight: 500;
+      background: var(--color-bg-tertiary); padding: 2px var(--space-2);
+      border-radius: var(--radius-1); color: var(--color-text-secondary);
+    }
+    .case-btn {
+      font-size: 12px; font-family: var(--font-family);
+      background: var(--color-bg-primary); border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-1); padding: 3px var(--space-2);
+      cursor: pointer; color: var(--color-text-secondary);
+      transition: background 150ms ease;
+    }
+    .case-btn:hover { background: var(--color-bg-tertiary); }
+
+    /* Right: code inside drawer panel */
+    .panel-code {
+      width: var(--col-code-w);
+      background: var(--color-surface-dark);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .panel-code-header {
+      background: var(--color-code-header); border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: var(--space-2) var(--space-3); display: flex; align-items: center; gap: 6px;
+      flex-shrink: 0;
+    }
+    .panel-code-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .dot-l1 { background: var(--color-success); }
+    .dot-l2 { background: var(--color-primary); }
+    .dot-l3 { background: var(--color-text-muted); }
+    .panel-code-label {
+      font-size: 12px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.06em; color: #64748b; font-family: var(--font-family);
+    }
+    .panel-code pre {
+      flex: 1; overflow-y: auto; padding: var(--space-3) var(--space-4);
+      font-size: 12px; line-height: 1.65;
+    }
+
+    /* ─── COLUMN INDICATOR (mini Miller strip) ───────────────── */
+    .miller-strip {
+      display: none;
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 6px;
+      background: linear-gradient(to right, rgba(0,128,255,0.15), transparent);
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* ─── AI FAB ─────────────────────────────────────────────── */
+    .ai-fab {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-primary);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(0,128,255,0.35);
+      color: #fff; font-size: 18px; z-index: 300;
+      transition: background 150ms ease;
+    }
+    .ai-fab:hover { background: var(--color-primary-alt); }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--color-border-default); border-radius: 3px; }
+    .panel-code ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOP HEADER ═══════════════════════════════════════════════ -->
+<header class="top-header">
+  <div class="logo">
+    <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
+      <path d="M20 4v32M4 20h32M8 8l24 24M32 8L8 32" stroke="#00b388" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="20" cy="4" r="3" fill="#00b388"/>
+      <circle cx="20" cy="36" r="3" fill="#00b388"/>
+      <circle cx="4" cy="20" r="3" fill="#00b388"/>
+      <circle cx="36" cy="20" r="3" fill="#00b388"/>
+      <circle cx="8" cy="8" r="2.5" fill="#00b388"/>
+      <circle cx="32" cy="32" r="2.5" fill="#00b388"/>
+      <circle cx="32" cy="8" r="2.5" fill="#00b388"/>
+      <circle cx="8" cy="32" r="2.5" fill="#00b388"/>
+    </svg>
+    MAXIO
+  </div>
+  <div class="header-divider"></div>
+  <span class="portal-label">Advanced Billing Developer Portal</span>
+</header>
+
+<!-- ═══ TOOLBAR ══════════════════════════════════════════════════ -->
+<div class="toolbar">
+  <button class="btn-sdk">Get SDK</button>
+  <button class="btn-outline">API Spec</button>
+  <div class="search-box">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Search <kbd>⌘K</kbd>
+  </div>
+</div>
+
+<!-- ═══ LAYOUT ════════════════════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- LEFT NAV (unchanged, always anchored to Create Coupon) -->
+  <nav class="left-nav">
+    <div class="nav-group-toggle">
+      Advance Invoice
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div class="nav-group-toggle">
+      Billing Portal
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div class="nav-group-toggle" style="color:var(--color-primary);font-weight:600;">
+      Coupons
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 9-7 7-7-7"/></svg>
+    </div>
+    <a class="nav-item" href="#">Overview</a>
+    <a class="nav-item active" href="#">Create Coupon</a>
+    <a class="nav-item" href="#">List Coupons for Product Family</a>
+    <a class="nav-item" href="#">Find Coupon</a>
+    <a class="nav-item" href="#">Read Coupon</a>
+    <a class="nav-item" href="#">Update Coupon</a>
+    <a class="nav-item" href="#">Archive Coupon</a>
+    <a class="nav-item" href="#">List Coupons</a>
+    <a class="nav-item" href="#">Read Coupon Usage</a>
+    <a class="nav-item" href="#">Validate Coupon</a>
+    <a class="nav-item" href="#">Create or Update Coupon</a>
+    <div class="nav-group-toggle">
+      Coupon Currency
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div class="nav-group-toggle">
+      Coupon Subcodes
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div class="nav-group-toggle">
+      Coupon Usage
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <span class="nav-built-tag">Built with APIMatic</span>
+  </nav>
+
+  <!-- CONTENT + CODE WRAPPER -->
+  <div class="content-code-wrapper">
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="mainContent">
+      <div class="breadcrumb">
+        <a href="#">Advanced Billing API</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>Coupons</span>
+        <span class="breadcrumb-sep">›</span>
+        <span>Create Coupon</span>
+      </div>
+      <h1 class="page-title">API Code Playground</h1>
+      <p class="page-subtitle">Create a coupon by passing the coupon payload in the request body.</p>
+
+      <!-- productFamilyId -->
+      <div class="param-section">
+        <div class="param-header">
+          <span class="param-header-name">productFamilyId</span>
+          <span class="tag-required">required</span>
+          <span class="param-header-meta">int · Template</span>
+        </div>
+        <div class="param-body">
+          <p class="param-description">The Advanced Billing id of the product family to which the coupon belongs.</p>
+          <div style="margin-top:var(--space-2);padding:6px 10px;background:var(--color-bg-secondary);border:1px solid var(--color-border-subtle);border-radius:var(--radius-1);font-size:12px;color:var(--color-text-primary);">140</div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div style="margin-bottom:var(--space-5);">
+        <div class="section-toggle">
+          <input type="checkbox" class="section-toggle-checkbox" checked />
+          <span class="section-toggle-label">body</span>
+          <span class="section-toggle-type">CouponRequest · Body</span>
+        </div>
+
+        <!-- coupon field -->
+        <div class="field-row">
+          <div class="field-row-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:2px;color:var(--color-text-muted);"><path d="m9 18 6-6-6-6"/></svg>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-1);">
+                <span class="field-name">coupon</span>
+                <a class="type-link" id="mainLinkCouponRequest" onclick="openDrawer(0, event)">
+                  CouponRequest
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <span class="drawer-hint">Opens in side panel →</span>
+              </div>
+              <p class="field-desc">Required when creating a new coupon. This name is not displayed to customers and is limited to 255 characters.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- code field -->
+        <div class="field-row">
+          <div class="field-row-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:2px;color:var(--color-text-muted);"><path d="m9 18 6-6-6-6"/></svg>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-1);">
+                <span class="field-name">code</span>
+                <span class="field-type-plain">string</span>
+              </div>
+              <p class="field-desc">The coupon code. Limited to 255 characters, may contain alphanumeric and special characters.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- percentage field -->
+        <div class="field-row">
+          <div class="field-row-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:2px;color:var(--color-text-muted);"><path d="m9 18 6-6-6-6"/></svg>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-1);">
+                <span class="field-name">percentage</span>
+                <span class="field-type-plain">string</span>
+              </div>
+              <p class="field-desc">The percentage-based discount value for this coupon.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- MAIN CODE PANEL (shown when drawer is closed) -->
+    <aside class="main-code-panel" id="mainCodePanel">
+      <div class="code-lang-tabs">
+        <div class="lang-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 9l-3 3 3 3m8-6 3 3-3 3M14 6l-4 12"/></svg>HTTP</div>
+        <div class="lang-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 8h10M7 12h10M7 16h6"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Java</div>
+        <div class="lang-tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h8M12 8v8"/></svg>.NET</div>
+        <div class="lang-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 3H12H8C6.34 3 5 4.34 5 6v12c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V8.625L13.5 3z"/></svg>PHP</div>
+        <div class="lang-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 18.5 7 15V9l5-3 5 3v6l-5 3.5z"/></svg>Python</div>
+      </div>
+      <pre><span class="kw">using</span> <span class="cl">AdvancedBilling.Standard</span>;
+<span class="kw">using</span> <span class="cl">AdvancedBilling.Standard.Controllers</span>;
+<span class="kw">using</span> <span class="cl">AdvancedBilling.Standard.Exceptions</span>;
+<span class="kw">using</span> <span class="cl">AdvancedBilling.Standard.Models</span>;
+<span class="kw">using</span> System;
+<span class="kw">using</span> System.Collections.Generic;
+<span class="kw">using</span> System.Threading.Tasks;
+
+<span class="kw">namespace</span> TestConsoleProject
+<span class="kw">{</span>
+  <span class="kw">public class</span> <span class="cl">Program</span>
+  <span class="kw">{</span>
+    <span class="kw">static async</span> Task <span class="fn">Main</span>()
+    <span class="kw">{</span>
+      <span class="cl">AdvancedBillingClient</span> client =
+        <span class="kw">new</span> <span class="cl">AdvancedBillingClient</span>
+          .<span class="fn">Builder</span>()
+          .<span class="fn">HttpClientConfig</span>(...)
+          .<span class="fn">Build</span>();
+
+      <span class="kw">var</span> payload =
+        <span class="cl">CouponPayload</span>.<span class="fn">FromName</span>(
+          <span class="st">"15% off"</span>
+        );
+    <span class="kw">}</span>
+  <span class="kw">}</span>
+<span class="kw">}</span></pre>
+    </aside>
+
+    <!-- ─── DRAWER OVERLAY ──────────────────────────────────── -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+    <!-- ─── DRAWER PANEL ────────────────────────────────────── -->
+    <div class="drawer" id="drawer">
+
+      <!-- Miller Column breadcrumb trail -->
+      <div class="drawer-trail" id="drawerTrail">
+        <button class="trail-close-btn" onclick="closeDrawer()" title="Close panel">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="trail-steps" id="trailSteps">
+          <!-- Trail steps injected by JS -->
+        </div>
+      </div>
+
+      <!-- Panels viewport (slides horizontally) -->
+      <div class="drawer-panels-viewport">
+        <div class="drawer-panels-track" id="panelsTrack">
+
+          <!-- ── PANEL 0: CouponRequest ── -->
+          <div class="drawer-panel" id="panel0">
+            <div class="panel-info">
+              <div class="panel-type-tag tag-model">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+                Model
+              </div>
+              <div class="panel-class-name">CouponRequest</div>
+              <div class="panel-fields-label">Fields</div>
+
+              <!-- coupon → CouponPayload (clickable, drills to next panel) -->
+              <div class="panel-field clickable" id="fieldCouponPayload" onclick="openPanel(1)">
+                <div class="panel-field-top">
+                  <span class="panel-field-name">coupon</span>
+                  <span class="panel-field-link" id="linkCouponPayload">
+                    CouponPayload
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+                  </span>
+                  <svg class="panel-field-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+                <div class="panel-field-desc">Required coupon payload. Click to explore fields →</div>
+              </div>
+
+              <!-- RestrictedProducts -->
+              <div class="panel-field">
+                <div class="panel-field-top">
+                  <span class="panel-field-name">RestrictedProducts</span>
+                  <span class="field-type-plain" style="font-size:12px;">Dictionary&lt;string, bool&gt;</span>
+                </div>
+                <div class="panel-field-desc">Product IDs or handles with applicability booleans.</div>
+              </div>
+
+              <!-- RestrictedComponents -->
+              <div class="panel-field">
+                <div class="panel-field-top">
+                  <span class="panel-field-name">RestrictedComponents</span>
+                  <span class="field-type-plain" style="font-size:12px;">Dictionary&lt;string, bool&gt;</span>
+                </div>
+                <div class="panel-field-desc">Component IDs or handles with applicability booleans.</div>
+              </div>
+            </div>
+
+            <!-- Code right side -->
+            <div class="panel-code">
+              <div class="panel-code-header">
+                <span class="panel-code-dot dot-l1"></span>
+                <span class="panel-code-label">CouponRequest — Schema</span>
+              </div>
+              <pre>{
+  <span class="ky">"coupon"</span>: {
+    <span class="ky">"name"</span>: <span class="vl">"name4"</span>,
+    <span class="ky">"code"</span>: <span class="vl">"code2"</span>,
+    <span class="ky">"description"</span>: <span class="vl">"descriptionA"</span>,
+    <span class="ky">"percentage"</span>: <span class="vl">"String2"</span>,
+    <span class="ky">"amount_in_cents"</span>: <span class="nb">238</span>
+  },
+  <span class="ky">"restricted_products"</span>: {
+    <span class="ky">"key0"</span>: <span class="bo">true</span>
+  },
+  <span class="ky">"restricted_components"</span>: {
+    <span class="ky">"key0"</span>: <span class="bo">true</span>
+  }
+}</pre>
+            </div>
+          </div>
+          <!-- /PANEL 0 -->
+
+          <!-- ── PANEL 1: CouponPayload ── -->
+          <div class="drawer-panel" id="panel1">
+            <div class="panel-info">
+              <div class="panel-type-tag tag-model">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+                Model
+              </div>
+              <div class="panel-class-name">CouponPayload</div>
+              <div class="panel-fields-label">Fields</div>
+
+              <div class="panel-field">
+                <div class="panel-field-top">
+                  <span class="panel-field-name">name</span>
+                  <span class="field-type-plain" style="font-size:12px;">string</span>
+                </div>
+                <div class="panel-field-desc">Required. Not displayed to customers. Max 255 chars.</div>
+              </div>
+              <div class="panel-field">
+                <div class="panel-field-top">
+                  <span class="panel-field-name">code</span>
+                  <span class="field-type-plain" style="font-size:12px;">string</span>
+                </div>
+                <div class="panel-field-desc">Required. Max 255 chars. Alphanumeric + special chars.</div>
+              </div>
+              <div class="panel-field">
+                <div class="panel-field-top">
+                  <span class="panel-field-name">description</span>
+                  <span class="field-type-plain" style="font-size:12px;">string</span>
+                </div>
+                <div class="panel-field-desc">Displayed to customers in transactions and statements.</div>
+              </div>
+
+              <!-- percentage → CouponPayloadPercentage (clickable) -->
+              <div class="panel-field clickable" id="fieldCouponPct" onclick="openPanel(2)">
+                <div class="panel-field-top">
+                  <span class="panel-field-name">percentage</span>
+                  <span class="panel-field-link" id="linkCouponPayloadPct">
+                    CouponPayloadPercentage
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+                  </span>
+                  <svg class="panel-field-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+                <div class="panel-field-desc">Discount percentage value. Click to explore type variants →</div>
+              </div>
+
+              <div class="panel-field">
+                <div class="panel-field-top">
+                  <span class="panel-field-name">amount_in_cents</span>
+                  <span class="field-type-plain" style="font-size:12px;">long</span>
+                </div>
+                <div class="panel-field-desc">The amount of the coupon in cents.</div>
+              </div>
+            </div>
+
+            <!-- Code right side -->
+            <div class="panel-code">
+              <div class="panel-code-header">
+                <span class="panel-code-dot dot-l2"></span>
+                <span class="panel-code-label">CouponPayload — Schema</span>
+              </div>
+              <pre>{
+  <span class="ky">"name"</span>: <span class="vl">"name8"</span>,
+  <span class="ky">"code"</span>: <span class="vl">"code6"</span>,
+  <span class="ky">"description"</span>: <span class="vl">"descriptionB"</span>,
+  <span class="ky">"percentage"</span>: <span class="vl">"String3"</span>,
+  <span class="ky">"amount_in_cents"</span>: <span class="nb">110</span>
+}</pre>
+            </div>
+          </div>
+          <!-- /PANEL 1 -->
+
+          <!-- ── PANEL 2: CouponPayloadPercentage ── -->
+          <div class="drawer-panel" id="panel2">
+            <div class="panel-info">
+              <div class="panel-type-tag tag-oneof">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                OneOf / AnyOf
+              </div>
+              <div class="panel-class-name">CouponPayloadPercentage</div>
+
+              <div class="cases-label">Cases</div>
+
+              <div class="case-item">
+                <div class="case-item-header">
+                  <span class="case-type-label">Type</span>
+                  <span class="case-type-value">string</span>
+                  <button class="case-btn">Method Signature</button>
+                  <button class="case-btn">Initialization Code</button>
+                </div>
+              </div>
+              <div class="case-item">
+                <div class="case-item-header">
+                  <span class="case-type-label">Type</span>
+                  <span class="case-type-value">double</span>
+                  <button class="case-btn">Method Signature</button>
+                  <button class="case-btn">Initialization Code</button>
+                </div>
+              </div>
+
+              <div style="margin-top:var(--space-4);padding:10px;background:var(--color-primary-10);border:1px solid var(--color-primary-50);border-radius:var(--radius-1);">
+                <div style="font-size:12px;font-weight:500;color:var(--color-primary);margin-bottom:var(--space-1);">Usage Note</div>
+                <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5;">This type accepts either a string percentage (e.g. <code style="background:var(--color-bg-tertiary);padding:1px 4px;border-radius:var(--radius-1);">"15%"</code>) or a numeric double (e.g. <code style="background:var(--color-bg-tertiary);padding:1px 4px;border-radius:var(--radius-1);">15.0</code>).</div>
+              </div>
+            </div>
+
+            <!-- Code right side -->
+            <div class="panel-code">
+              <div class="panel-code-header">
+                <span class="panel-code-dot dot-l3"></span>
+                <span class="panel-code-label">Utilization Code</span>
+              </div>
+              <pre>value.<span class="fn">Match</span>&lt;<span class="cl">VoidType</span>&gt;(
+  mString: @case =&gt;
+  {
+    Console.<span class="fn">WriteLine</span>(@case);
+    <span class="kw">return null</span>;
+  },
+  precision: @case =&gt;
+  {
+    Console.<span class="fn">WriteLine</span>(@case);
+    <span class="kw">return null</span>;
+  }
+);</pre>
+            </div>
+          </div>
+          <!-- /PANEL 2 -->
+
+        </div>
+        <!-- /panels-track -->
+      </div>
+      <!-- /panels-viewport -->
+
+    </div>
+    <!-- /drawer -->
+
+  </div>
+  <!-- /content-code-wrapper -->
+
+</div>
+<!-- /layout -->
+
+<button class="ai-fab" title="Ask AI">✦</button>
+
+<script>
+  // ── State ──────────────────────────────────────────────────────
+  const PANEL_COUNT = 3;
+  let drawerOpen = false;
+  let currentDepth = 0; // 0 = CouponRequest, 1 = CouponPayload, 2 = CouponPayloadPercentage
+
+  const trail = [
+    { label: 'CouponRequest',           badge: 'badge-l1', color: '#29a746' },
+    { label: 'CouponPayload',           badge: 'badge-l2', color: '#0080ff' },
+    { label: 'CouponPayloadPercentage', badge: 'badge-l3', color: '#999fb7' },
+  ];
+
+  // ── Open drawer at a specific panel depth ──────────────────────
+  function openDrawer(depth, e) {
+    if (e) e.preventDefault();
+    currentDepth = depth;
+    drawerOpen = true;
+
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawerOverlay').classList.add('visible');
+    document.getElementById('mainContent').classList.add('dimmed');
+    document.getElementById('mainCodePanel').classList.add('pushed');
+
+    // Highlight the link that was clicked
+    document.getElementById('mainLinkCouponRequest').classList.add('active');
+
+    slideTo(depth);
+    renderTrail();
+  }
+
+  // ── Open a deeper panel (push) ─────────────────────────────────
+  function openPanel(depth) {
+    currentDepth = depth;
+    slideTo(depth);
+    renderTrail();
+
+    // Mark the selected field in the previous panel
+    if (depth === 1) {
+      document.getElementById('fieldCouponPayload').classList.add('selected');
+      document.getElementById('linkCouponPayload').classList.add('drilled');
+    }
+    if (depth === 2) {
+      document.getElementById('fieldCouponPct').classList.add('selected');
+      document.getElementById('linkCouponPayloadPct').classList.add('drilled');
+    }
+  }
+
+  // ── Navigate back to a breadcrumb step ────────────────────────
+  function goToTrailStep(depth) {
+    if (depth === currentDepth) return;
+    currentDepth = depth;
+    slideTo(depth);
+    renderTrail();
+
+    // Reset selection states for panels deeper than current
+    if (depth < 1) {
+      document.getElementById('fieldCouponPayload').classList.remove('selected');
+      document.getElementById('linkCouponPayload').classList.remove('drilled');
+    }
+    if (depth < 2) {
+      document.getElementById('fieldCouponPct').classList.remove('selected');
+      document.getElementById('linkCouponPayloadPct').classList.remove('drilled');
+    }
+  }
+
+  // ── Slide the panel track to depth ────────────────────────────
+  function slideTo(depth) {
+    const track = document.getElementById('panelsTrack');
+    const drawerWidth = parseFloat(getComputedStyle(document.documentElement)
+      .getPropertyValue('--drawer-width'));
+    track.style.transform = `translateX(-${depth * drawerWidth}px)`;
+  }
+
+  // ── Close drawer entirely ─────────────────────────────────────
+  function closeDrawer() {
+    drawerOpen = false;
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('visible');
+    document.getElementById('mainContent').classList.remove('dimmed');
+    document.getElementById('mainCodePanel').classList.remove('pushed');
+    document.getElementById('mainLinkCouponRequest').classList.remove('active');
+
+    // Reset all selections
+    document.getElementById('fieldCouponPayload').classList.remove('selected');
+    document.getElementById('linkCouponPayload').classList.remove('drilled');
+    document.getElementById('fieldCouponPct').classList.remove('selected');
+    document.getElementById('linkCouponPayloadPct').classList.remove('drilled');
+
+    // Reset track position after close animation
+    setTimeout(() => {
+      currentDepth = 0;
+      slideTo(0);
+      renderTrail();
+    }, 350);
+  }
+
+  // ── Render the breadcrumb trail ────────────────────────────────
+  function renderTrail() {
+    const container = document.getElementById('trailSteps');
+    const steps = trail.slice(0, currentDepth + 1);
+    container.innerHTML = steps.map((step, i) => {
+      const isCurrent = i === currentDepth;
+      return `
+        ${i > 0 ? '<span class="trail-sep">›</span>' : ''}
+        <div class="trail-step">
+          <button
+            class="trail-step-btn ${isCurrent ? 'current' : ''}"
+            onclick="goToTrailStep(${i})"
+          >
+            <span class="trail-step-badge ${step.badge}"></span>
+            ${step.label}
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── Keyboard: Escape to close ─────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && drawerOpen) closeDrawer();
+  });
+
+  // Init trail
+  renderTrail();
+</script>
+
+</body>
+</html>
