@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APIMatic — API Copilot: Chat-First Portal Wireframe v2</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      background: #E6EDF5;
+      color: #0D1117;
+      padding: 40px 24px 60px;
+    }
+
+    /* ── Document wrapper ── */
+    .wf-doc { max-width: 1320px; margin: 0 auto; }
+
+    /* ── Document header ── */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+    .doc-header h1 {
+      font-size: 21px;
+      font-weight: 800;
+      color: #0D1117;
+      letter-spacing: -0.5px;
+    }
+    .doc-header p {
+      font-size: 13px;
+      color: #888;
+      margin-top: 6px;
+    }
+    .doc-meta {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .doc-meta span {
+      font-size: 11px;
+      background: #D8E4F0;
+      color: #3A5872;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    /* ── Screen card ── */
+    .screen {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 56px;
+      box-shadow: 0 2px 20px rgba(12,128,242,0.07), 0 0 0 1px rgba(12,128,242,0.06);
+    }
+
+    /* ── Screen label ── */
+    .screen-header {
+      background: #0A1929;
+      color: white;
+      padding: 13px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .screen-title { font-size: 12px; font-weight: 700; letter-spacing: 0.3px; }
+    .screen-badge {
+      font-size: 11px;
+      background: rgba(12,128,242,0.25);
+      padding: 4px 10px;
+      border-radius: 5px;
+      white-space: nowrap;
+      color: #90CAFF;
+    }
+
+    /* ── Browser chrome ── */
+    .browser-bar {
+      background: #F3F7FB;
+      border-bottom: 1px solid #DDE7F0;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .browser-dots { display: flex; gap: 5px; }
+    .browser-dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #C8D8E8;
+    }
+    .browser-url {
+      flex: 1;
+      background: white;
+      border: 1px solid #D0DEEC;
+      border-radius: 6px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* ── Portal nav ── */
+    .portal-nav {
+      background: white;
+      border-bottom: 1px solid #E8EFF6;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      height: 54px;
+      gap: 28px;
+    }
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0C80F2;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+    .nav-logo span { color: #0D1117; }
+    .nav-links { display: flex; gap: 22px; flex: 1; }
+    .nav-link { font-size: 13px; color: #666; text-decoration: none; }
+    .nav-link.active { color: #0C80F2; font-weight: 600; }
+    .nav-signin { font-size: 12px; color: #888; }
+    .nav-cta {
+      font-size: 12px;
+      font-weight: 600;
+      background: #0C80F2;
+      color: white;
+      padding: 7px 16px;
+      border-radius: 7px;
+      white-space: nowrap;
+    }
+
+    /* ══ SCREEN 1 — Hero ══ */
+    .hero {
+      background: linear-gradient(165deg, #EFF6FF 0%, #FAFCFF 55%);
+      padding: 68px 32px 52px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: #0C80F2;
+      margin-bottom: 14px;
+    }
+    .hero-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #0D1117;
+      letter-spacing: -1.2px;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: #555;
+      max-width: 540px;
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+
+    /* ── Chat input (homepage) ── */
+    .chat-input-card {
+      width: 100%;
+      max-width: 700px;
+      background: white;
+      border: 1.5px solid #C8DEFA;
+      border-radius: 14px;
+      box-shadow: 0 6px 28px rgba(12,128,242,0.10);
+      overflow: hidden;
+    }
+    .mode-toggle-row {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #EBF3FC;
+      padding: 0 14px;
+    }
+    .mode-btn {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 10px 16px;
+      color: #999;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+    .mode-btn.active {
+      color: #0C80F2;
+      font-weight: 700;
+      border-bottom-color: #0C80F2;
+    }
+    .mode-sep {
+      width: 1px;
+      height: 16px;
+      background: #E8EFF6;
+      margin: 0 4px;
+    }
+    .mode-hint {
+      margin-left: auto;
+      font-size: 11px;
+      color: #BBB;
+    }
+    .chat-textarea-row {
+      padding: 16px 20px 12px;
+      font-size: 14px;
+      color: #AAB8C8;
+      line-height: 1.5;
+    }
+    .chat-input-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      border-top: 1px solid #F0F6FC;
+    }
+    .scope-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #EFF6FF;
+      color: #0C80F2;
+      padding: 5px 12px;
+      border-radius: 100px;
+      border: 1px solid #BFDBFE;
+    }
+    .scope-chip-icon { font-size: 13px; }
+    .send-btn {
+      background: #0C80F2;
+      color: white;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ── Suggested queries ── */
+    .suggested-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 700px;
+      margin-top: 22px;
+    }
+    .suggested-label {
+      font-size: 11px;
+      color: #BBB;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .suggested-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .suggestion-chip {
+      font-size: 12px;
+      background: white;
+      border: 1px solid #D0DEEC;
+      color: #3A5872;
+      padding: 6px 14px;
+      border-radius: 100px;
+      cursor: pointer;
+    }
+    .browse-link {
+      margin-top: 26px;
+      font-size: 13px;
+      color: #999;
+    }
+    .browse-link a { color: #0C80F2; }
+
+    /* ── Quick tiles ── */
+    .quick-tiles {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      padding: 28px 28px;
+      background: #F7FAFD;
+      border-top: 1px solid #E8EFF6;
+    }
+    .tile {
+      background: white;
+      border: 1px solid #E4EDF6;
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .tile-icon {
+      width: 34px;
+      height: 34px;
+      background: #EFF6FF;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      margin-bottom: 10px;
+    }
+    .tile-title { font-size: 13px; font-weight: 700; color: #0D1117; margin-bottom: 5px; }
+    .tile-desc { font-size: 11px; color: #888; line-height: 1.55; }
+
+    /* ══ SCREEN 2 — Three-column chat ══ */
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 228px 1fr 272px;
+      height: 700px;
+    }
+
+    /* Context scope bar */
+    .scope-bar {
+      grid-column: 1 / -1;
+      background: #F0F7FF;
+      border-bottom: 1px solid #C8DEFA;
+      padding: 8px 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+    .scope-bar-label { color: #888; font-size: 11px; }
+    .scope-bar-select {
+      background: white;
+      border: 1px solid #C8DEFA;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0C80F2;
+    }
+    .scope-bar-badge {
+      font-size: 11px;
+      background: #DBEAFE;
+      color: #0A6ED1;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .scope-bar-hint { margin-left: auto; font-size: 11px; color: #BBB; }
+
+    /* Left sidebar */
+    .chat-sidebar {
+      border-right: 1px solid #E8EFF6;
+      overflow-y: auto;
+      padding: 16px 0;
+    }
+    .sidebar-section { padding: 0 14px; margin-bottom: 22px; }
+    .sidebar-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #B8C8D8;
+      margin-bottom: 8px;
+    }
+    .sidebar-item {
+      font-size: 12px;
+      color: #556070;
+      padding: 5px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 2px;
+    }
+    .sidebar-item.active {
+      background: #EFF6FF;
+      color: #0C80F2;
+      font-weight: 700;
+    }
+    .sidebar-item.sub {
+      padding-left: 20px;
+      font-size: 11px;
+      color: #8898A8;
+    }
+    .sidebar-item.sub.active-sub {
+      color: #0C80F2;
+      font-weight: 600;
+    }
+
+    /* Chat main area */
+    .chat-main {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #E8EFF6;
+      overflow: hidden;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* Message bubbles */
+    .msg { display: flex; gap: 12px; }
+    .msg-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .msg-avatar.user { background: #DBEAFE; color: #0A6ED1; }
+    .msg-avatar.ai   { background: #0C80F2; color: white; }
+    .msg-body { flex: 1; min-width: 0; }
+    .msg-name { font-size: 11px; font-weight: 700; color: #AAB8C8; margin-bottom: 5px; }
+    .msg-text { font-size: 13px; color: #1A2530; line-height: 1.65; }
+    .inline-code {
+      background: #EFF6FF;
+      color: #0A6ED1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+    }
+
+    /* Code block */
+    .code-block {
+      background: #0D1929;
+      border-radius: 9px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      border-bottom: 1px solid rgba(12,128,242,0.15);
+    }
+    .code-lang { font-size: 11px; color: #6A8AA8; font-family: monospace; }
+    .code-endpoints-tag {
+      font-size: 10px;
+      background: rgba(12,128,242,0.30);
+      color: #7DC4F8;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .code-body {
+      padding: 14px 16px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+      color: #C8DCF0;
+      line-height: 1.7;
+    }
+    .code-comment { color: #445568; }
+    .code-keyword { color: #60A5FA; }
+    .code-string  { color: #6EE7B7; }
+    .code-prop    { color: #FCD34D; }
+
+    /* Capability-reveal callout */
+    .capability-reveal {
+      background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+      border: 1px solid #93C5FD;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+    .cr-title { font-size: 12px; font-weight: 700; color: #0A6ED1; margin-bottom: 5px; }
+    .cr-text  { font-size: 12px; color: #445568; line-height: 1.6; }
+    .cr-cta   {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0C80F2;
+      border-bottom: 1px solid currentColor;
+      cursor: pointer;
+    }
+
+    /* Chat bottom input */
+    .chat-bottom {
+      border-top: 1px solid #E8EFF6;
+      padding: 12px 20px;
+    }
+    .chat-bottom-inner {
+      background: #F3F7FB;
+      border: 1.5px solid #D0DEEC;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .chat-bottom-placeholder { flex: 1; font-size: 13px; color: #A8B8C8; }
+    .mode-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 9px;
+      background: #DBEAFE;
+      color: #0A6ED1;
+      border-radius: 100px;
+    }
+    .send-icon-btn {
+      width: 30px; height: 30px;
+      background: #0C80F2;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    /* Right panel */
+    .right-panel {
+      overflow-y: auto;
+      padding: 20px 16px;
+      background: #F7FAFD;
+    }
+    .rp-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #A8BCCF;
+      margin-bottom: 12px;
+      margin-top: 20px;
+    }
+    .rp-section-title:first-child { margin-top: 0; }
+
+    /* Persona strip */
+    .persona-strip {
+      background: white;
+      border: 1px solid #E4EDF6;
+      border-radius: 9px;
+      padding: 12px 13px;
+      margin-bottom: 14px;
+    }
+    .persona-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .persona-chip {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: #EEF3F8;
+      color: #668099;
+      cursor: pointer;
+    }
+    .persona-chip.active { background: #DBEAFE; color: #0A6ED1; font-weight: 700; }
+
+    /* Funnel card */
+    .funnel-card {
+      background: white;
+      border: 1.5px solid #C8DEFA;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .funnel-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0D1117;
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .funnel-card-desc {
+      font-size: 12px;
+      color: #556070;
+      line-height: 1.55;
+      margin-bottom: 13px;
+    }
+    .funnel-btn-primary {
+      display: block;
+      width: 100%;
+      background: #0C80F2;
+      color: white;
+      text-align: center;
+      padding: 9px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+    .funnel-btn-outline {
+      display: block;
+      width: 100%;
+      background: white;
+      color: #0C80F2;
+      text-align: center;
+      padding: 8px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1.5px solid #0C80F2;
+      margin-top: 7px;
+      cursor: pointer;
+    }
+
+    /* Citations */
+    .citations-card {
+      background: white;
+      border: 1px solid #E4EDF6;
+      border-radius: 9px;
+      padding: 10px 13px;
+    }
+    .citation-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 11px;
+      color: #556070;
+      padding: 5px 0;
+      border-bottom: 1px solid #EEF3F8;
+    }
+    .citation-row:last-child { border-bottom: none; }
+    .citation-dot { width: 6px; height: 6px; background: #0C80F2; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── Annotation bar ── */
+    .annotations-bar {
+      background: #FFFCF0;
+      border-top: 1px solid #FFE8A0;
+      padding: 18px 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .annotation { display: flex; gap: 10px; align-items: flex-start; }
+    .ann-num {
+      width: 22px; height: 22px;
+      background: #F5A623;
+      color: white;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .ann-text { font-size: 11px; color: #445568; line-height: 1.6; }
+    .ann-text strong { color: #111; }
+
+    /* ── Screen 3 ── */
+    .s3-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: 340px;
+    }
+    .s3-left {
+      padding: 28px 28px;
+      border-right: 1px solid #E8EFF6;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .s3-right {
+      padding: 28px 28px;
+      background: #F7FAFD;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .state-title { font-size: 13px; font-weight: 700; color: #0D1117; margin-bottom: 2px; }
+    .state-sub { font-size: 12px; color: #778899; line-height: 1.5; }
+    .compare-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .compare-label {
+      font-size: 11px;
+      font-weight: 700;
+      width: 90px;
+      flex-shrink: 0;
+      color: #778899;
+      padding-top: 3px;
+    }
+    .compare-value {
+      font-size: 12px;
+      color: #1A2530;
+      line-height: 1.5;
+    }
+    .verdict-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 100px;
+      margin-top: 8px;
+    }
+    .verdict-gap  { background: #FFF3CD; color: #7A5500; }
+    .verdict-win  { background: #D4F5E4; color: #1A5C3A; }
+    .verdict-new  { background: #DBEAFE; color: #0A6ED1; }
+
+    /* ── Divider between screens ── */
+    .screen-divider {
+      text-align: center;
+      margin: 8px 0 44px;
+      font-size: 12px;
+      color: #AAB8C8;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Footer ── */
+    .doc-footer {
+      text-align: center;
+      font-size: 11px;
+      color: #A8BCCF;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wf-doc">
+
+  <!-- ── Document header ── -->
+  <div class="doc-header">
+    <h1>APIMatic — API Copilot: Chat-First Portal</h1>
+    <p>HTML wireframe · 3 screens · Based on feature proposal + competitive analysis</p>
+    <div class="doc-meta">
+      <span>Status: Draft</span>
+      <span>Date: 2026-05-11</span>
+      <span>3 screens</span>
+      <span>6 annotated scope items</span>
+      <span>Not for external distribution</span>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 1 — Portal Homepage (Chat-First)
+  ══════════════════════════════════════════ -->
+  <div class="screen">
+    <div class="screen-header">
+      <span class="screen-title">SCREEN 1 — Portal Homepage · Chat-First Entry</span>
+      <span class="screen-badge">No competitor in the market does homepage-primary chat</span>
+    </div>
+
+    <div class="browser-bar">
+      <div class="browser-dots"><span></span><span></span><span></span></div>
+      <div class="browser-url">docs.your-api.com</div>
+    </div>
+
+    <div class="portal-nav">
+      <div class="nav-logo">API<span>Matic</span></div>
+      <div class="nav-links">
+        <a class="nav-link active" href="#">Copilot</a>
+        <a class="nav-link" href="#">API Reference</a>
+        <a class="nav-link" href="#">Guides</a>
+        <a class="nav-link" href="#">SDK</a>
+        <a class="nav-link" href="#">Context Plugin</a>
+      </div>
+      <span class="nav-signin">Sign in</span>
+      <div class="nav-cta">Get SDK →</div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-eyebrow">API Copilot</div>
+      <div class="hero-title">What can I help you build?</div>
+      <div class="hero-sub">Ask about any endpoint, explore use cases, or get working code. Copilot knows the full API — including how to chain endpoints into real integration workflows.</div>
+
+      <div class="chat-input-card">
+        <div class="mode-toggle-row">
+          <div class="mode-btn active">💬 Chat</div>
+          <div class="mode-sep"></div>
+          <div class="mode-btn">🔍 Search</div>
+          <div class="mode-hint">Auto-route by query type · Phase 2</div>
+        </div>
+        <div class="chat-textarea-row">
+          How do I create a payout and track its status in one flow?
+        </div>
+        <div class="chat-input-footer">
+          <div class="scope-chip">
+            <span class="scope-chip-icon">⬡</span>
+            All resources
+          </div>
+          <button class="send-btn">Ask Copilot &nbsp;→</button>
+        </div>
+      </div>
+
+      <div class="suggested-section">
+        <div class="suggested-label">Try asking:</div>
+        <div class="suggested-chips">
+          <div class="suggestion-chip">How do I authenticate?</div>
+          <div class="suggestion-chip">Show me payout endpoints</div>
+          <div class="suggestion-chip">Create a webhook for payment events</div>
+          <div class="suggestion-chip">What's the rate limit for /transfers?</div>
+          <div class="suggestion-chip">Generate SDK code for a refund flow</div>
+        </div>
+      </div>
+
+      <div class="browse-link">Prefer reference docs? <a href="#">Browse the full API →</a></div>
+    </div>
+
+    <div class="quick-tiles">
+      <div class="tile">
+        <div class="tile-icon">📦</div>
+        <div class="tile-title">SDK Downloads</div>
+        <div class="tile-desc">Get idiomatic SDK libraries for Python, TypeScript, Java, C# and more.</div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">🔌</div>
+        <div class="tile-title">Context Plugin</div>
+        <div class="tile-desc">Bring Copilot to your IDE. Works with VS Code, Cursor, and Windsurf.</div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">⚡</div>
+        <div class="tile-title">Quick Start</div>
+        <div class="tile-desc">Get your first API call working in under 5 minutes.</div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">🔑</div>
+        <div class="tile-title">Authentication</div>
+        <div class="tile-desc">OAuth 2.0, API keys, and token refresh — all patterns covered.</div>
+      </div>
+    </div>
+
+    <div class="annotations-bar">
+      <div class="annotation">
+        <div class="ann-num">1</div>
+        <div class="ann-text"><strong>Chat-first homepage</strong> — Copilot replaces the traditional "getting started" hero. Reference docs remain accessible via nav — de-emphasized, not removed. Customer-configurable flag should be planned from day one.</div>
+      </div>
+      <div class="annotation">
+        <div class="ann-num">2</div>
+        <div class="ann-text"><strong>Search / Chat mode toggle</strong> — Chat for generative answers; Search for fast lookups ("what is the field name for X?"). Auto-routing by query shape is a Phase 2 option. Validated by Algolia listing "AI + search unified" as their differentiator.</div>
+      </div>
+      <div class="annotation">
+        <div class="ann-num">3</div>
+        <div class="ann-text"><strong>Context scope chip</strong> — defaults to "All resources" on the homepage. Becomes page-specific once a user navigates to a reference page (e.g., /payouts). Surfaced as a suggestion, never forced — user controls trust radius.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen-divider">↓ &nbsp; User submits query &nbsp; → &nbsp; SCREEN 2: Active conversation</div>
+
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 2 — Active Chat (all 5 features on)
+  ══════════════════════════════════════════ -->
+  <div class="screen">
+    <div class="screen-header">
+      <span class="screen-title">SCREEN 2 — Active Chat · Page-Scoped Context · SDK Funnel · Persona Strip</span>
+      <span class="screen-badge">Scope items 3 · 4 · 5 active simultaneously</span>
+    </div>
+
+    <div class="browser-bar">
+      <div class="browser-dots"><span></span><span></span><span></span></div>
+      <div class="browser-url">docs.your-api.com/copilot?scope=payouts</div>
+    </div>
+
+    <div class="portal-nav">
+      <div class="nav-logo">API<span>Matic</span></div>
+      <div class="nav-links">
+        <a class="nav-link active" href="#">Copilot</a>
+        <a class="nav-link" href="#">API Reference</a>
+        <a class="nav-link" href="#">Guides</a>
+        <a class="nav-link" href="#">SDK</a>
+        <a class="nav-link" href="#">Context Plugin</a>
+      </div>
+      <span class="nav-signin">Sign in</span>
+      <div class="nav-cta">Get SDK →</div>
+    </div>
+
+    <!-- Context scope bar (full width) -->
+    <div class="scope-bar">
+      <span class="scope-bar-label">Context scoped to:</span>
+      <select class="scope-bar-select">
+        <option>Payouts Resource</option>
+      </select>
+      <span class="scope-bar-badge">6 endpoints</span>
+      <span class="scope-bar-hint">Narrow scope = sharper answers · Widen any time</span>
+    </div>
+
+    <!-- Three-column layout -->
+    <div class="chat-layout" style="display: grid; grid-template-columns: 228px 1fr 272px; height: 700px;">
+
+      <!-- Left sidebar -->
+      <div class="chat-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">API Reference</div>
+          <div class="sidebar-item">Overview</div>
+          <div class="sidebar-item">Authentication</div>
+          <div class="sidebar-item active">Payouts ●</div>
+          <div class="sidebar-item sub active-sub">POST /payouts</div>
+          <div class="sidebar-item sub active-sub">GET /payouts/:id</div>
+          <div class="sidebar-item sub">GET /payouts</div>
+          <div class="sidebar-item sub">POST /payouts/retry</div>
+          <div class="sidebar-item">Transfers</div>
+          <div class="sidebar-item">Webhooks</div>
+          <div class="sidebar-item">Refunds</div>
+          <div class="sidebar-item">Errors</div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Guides</div>
+          <div class="sidebar-item">Quick Start</div>
+          <div class="sidebar-item">Error Handling</div>
+          <div class="sidebar-item">Rate Limits</div>
+          <div class="sidebar-item">Webhooks Setup</div>
+        </div>
+      </div>
+
+      <!-- Chat main -->
+      <div class="chat-main">
+        <div class="chat-messages">
+
+          <!-- User message 1 -->
+          <div class="msg">
+            <div class="msg-avatar user">U</div>
+            <div class="msg-body">
+              <div class="msg-name">You</div>
+              <div class="msg-text">How do I create a payout and track its status in one flow?</div>
+            </div>
+          </div>
+
+          <!-- Copilot response 1 -->
+          <div class="msg">
+            <div class="msg-avatar ai">C</div>
+            <div class="msg-body">
+              <div class="msg-name">API Copilot · scoped to Payouts</div>
+              <div class="msg-text">
+                To create and track a payout, chain two endpoints: <span class="inline-code">POST /payouts</span> to initiate, then <span class="inline-code">GET /payouts/:id</span> to poll status. Here's the TypeScript flow using the SDK:
+              </div>
+              <div class="code-block">
+                <div class="code-block-header">
+                  <span class="code-lang">typescript · SDK</span>
+                  <span class="code-endpoints-tag">2 endpoints</span>
+                </div>
+                <div class="code-body">
+                  <span class="code-keyword">const</span> payout = <span class="code-keyword">await</span> client.payouts.create({<br>
+                  &nbsp;&nbsp;<span class="code-prop">amount</span>: <span class="code-string">5000</span>,<br>
+                  &nbsp;&nbsp;<span class="code-prop">currency</span>: <span class="code-string">"USD"</span>,<br>
+                  &nbsp;&nbsp;<span class="code-prop">destination</span>: <span class="code-string">"ba_1234"</span><br>
+                  });<br><br>
+                  <span class="code-comment">// Poll until terminal state</span><br>
+                  <span class="code-keyword">const</span> status = <span class="code-keyword">await</span> client.payouts.get(payout.id);
+                </div>
+              </div>
+
+              <!-- Capability-reveal callout -->
+              <div class="capability-reveal">
+                <div class="cr-title">⚡ Want to handle failures automatically too?</div>
+                <div class="cr-text">
+                  I can extend this to add <span class="inline-code" style="font-size:11px;">POST /payouts/retry</span> on a failed status — covering the full payout lifecycle in one orchestrated block. This is what the SDK is built for: multi-endpoint flows, not just single calls.
+                </div>
+                <div class="cr-cta">Show me the full lifecycle flow →</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- User message 2 -->
+          <div class="msg">
+            <div class="msg-avatar user">U</div>
+            <div class="msg-body">
+              <div class="msg-name">You</div>
+              <div class="msg-text">Yes, show the full lifecycle including retry.</div>
+            </div>
+          </div>
+
+          <!-- Copilot response 2 — orchestration reveal -->
+          <div class="msg">
+            <div class="msg-avatar ai">C</div>
+            <div class="msg-body">
+              <div class="msg-name">API Copilot</div>
+              <div class="msg-text">Complete lifecycle — create, poll, and auto-retry on failure:</div>
+              <div class="code-block">
+                <div class="code-block-header">
+                  <span class="code-lang">typescript · SDK</span>
+                  <span class="code-endpoints-tag">3 endpoints orchestrated</span>
+                </div>
+                <div class="code-body">
+                  <span class="code-keyword">const</span> payout = <span class="code-keyword">await</span> client.payouts.create({...});<br>
+                  <span class="code-keyword">let</span> status = <span class="code-keyword">await</span> client.payouts.get(payout.id);<br><br>
+                  <span class="code-keyword">if</span> (status.state === <span class="code-string">"failed"</span>) {<br>
+                  &nbsp;&nbsp;<span class="code-comment">// Retry automatically — same idempotency key</span><br>
+                  &nbsp;&nbsp;status = <span class="code-keyword">await</span> client.payouts.retry(payout.id);<br>
+                  }<br><br>
+                  <span class="code-keyword">return</span> status; <span class="code-comment">// terminal: succeeded | cancelled</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom input bar -->
+        <div class="chat-bottom">
+          <div class="chat-bottom-inner">
+            <div class="chat-bottom-placeholder">Ask a follow-up…</div>
+            <div class="mode-pill">CHAT</div>
+            <div class="send-icon-btn">→</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="right-panel">
+
+        <div class="rp-section-title">Persona</div>
+        <div class="persona-strip">
+          <div class="persona-chips">
+            <div class="persona-chip active">Developer integrating</div>
+            <div class="persona-chip">Vibe coder</div>
+            <div class="persona-chip">Evaluator</div>
+            <div class="persona-chip">Stakeholder</div>
+          </div>
+        </div>
+
+        <div class="rp-section-title">Take this further</div>
+
+        <div class="funnel-card">
+          <div class="funnel-card-title">📦 TypeScript SDK</div>
+          <div class="funnel-card-desc">The code above runs directly with the TypeScript SDK. Install it to use this flow in your project today.</div>
+          <button class="funnel-btn-primary">Get TypeScript SDK</button>
+          <button class="funnel-btn-outline">View all SDK languages →</button>
+        </div>
+
+        <div class="funnel-card">
+          <div class="funnel-card-title">🔌 Context Plugin</div>
+          <div class="funnel-card-desc">Bring this same Copilot into your IDE. Cursor, VS Code, and Windsurf supported — works with your existing codebase.</div>
+          <button class="funnel-btn-primary">Install for VS Code</button>
+          <button class="funnel-btn-outline">Other IDEs →</button>
+        </div>
+
+        <div class="rp-section-title">Sources</div>
+        <div class="citations-card">
+          <div class="citation-row">
+            <div class="citation-dot"></div>
+            POST /payouts — reference
+          </div>
+          <div class="citation-row">
+            <div class="citation-dot"></div>
+            GET /payouts/:id — reference
+          </div>
+          <div class="citation-row">
+            <div class="citation-dot"></div>
+            POST /payouts/retry — reference
+          </div>
+          <div class="citation-row">
+            <div class="citation-dot"></div>
+            Payout lifecycle guide
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="annotations-bar">
+      <div class="annotation">
+        <div class="ann-num">4</div>
+        <div class="ann-text"><strong>Page/resource scope bar</strong> — user navigated to Payouts; Copilot context narrows to 6 endpoints. Removes noise, sharpens answers. Scope is surfaced as a suggestion at the top — not forced. Only GitBook, Vercel, and Atlassian do this in the competitive set.</div>
+      </div>
+      <div class="annotation">
+        <div class="ann-num">5</div>
+        <div class="ann-text"><strong>Capability-revealing conversation</strong> — Copilot answered the single-endpoint question, then proactively offered the multi-step extension. The moat (3-endpoint orchestration) is demonstrated in flow, not pitched in copy. Proactive offer is conservative: triggered by clear integration intent, not speculative.</div>
+      </div>
+      <div class="annotation">
+        <div class="ann-num">6</div>
+        <div class="ann-text"><strong>SDK + Context Plugin funnel</strong> — triggered after integration-intent query. Right panel anchors the sequential story: Copilot = discovery, Context Plugin = take it home. Persona strip is passive (user-selectable) — avoids wrong-persona failure mode flagged as highest risk.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen-divider">↓ &nbsp; Supplementary · SCREEN 3: Competitive positioning map</div>
+
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 3 — Competitive Positioning Map
+  ══════════════════════════════════════════ -->
+  <div class="screen">
+    <div class="screen-header">
+      <span class="screen-title">SCREEN 3 — Competitive Positioning · Where APIMatic Stands</span>
+      <span class="screen-badge">Based on 17-product market analysis</span>
+    </div>
+
+    <div class="s3-grid">
+      <div class="s3-left">
+        <div class="state-title">What every competitor does</div>
+        <div class="state-sub">Baseline table stakes across the 17-product competitive set. APIMatic must match or exceed all of these to compete in the category.</div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+          <div class="compare-row">
+            <div class="compare-label">Placement</div>
+            <div class="compare-value">Sidebar, right panel, or floating widget. No one does homepage-primary. <span class="verdict-badge verdict-new">APIMatic: genuinely novel</span></div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-label">Citations</div>
+            <div class="compare-value">All 17 competitors show source citations. Table stakes. Must ship day one.</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-label">Code context</div>
+            <div class="compare-value">Most show code in responses. ~8 offer page/resource context. APIMatic's scoped context covers this gap. <span class="verdict-badge verdict-win">APIMatic: ahead of most</span></div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-label">MCP Server</div>
+            <div class="compare-value">10 of 17 have MCP. Fern ✓, Mintlify ✓, GitBook ✓, Stripe ✓, Scalar ✓. <span class="verdict-badge verdict-gap">Must close before shipping</span></div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-label">Embed / take-home</div>
+            <div class="compare-value">Fern, Mintlify, GitBook, Kapa.ai, Inkeep all embed elsewhere. Context Plugin is APIMatic's version — plus it's an IDE-native experience, not just an embed. <span class="verdict-badge verdict-win">APIMatic: differentiated framing</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s3-right">
+        <div class="state-title">APIMatic's actual differentiators</div>
+        <div class="state-sub">Capabilities no competitor in the table replicates. The proposal is correct that these are invisible today — the chat-first positioning makes them discoverable.</div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+          <div class="funnel-card" style="margin-bottom:0;">
+            <div class="funnel-card-title" style="font-size:12px;">🔗 Multi-endpoint SDK orchestration</div>
+            <div class="funnel-card-desc" style="margin-bottom:0;">No competitor's retrieval column mentions this. Fern uses Claude RAG; Mintlify uses Agentic RAG. APIMatic generates coordinated multi-call SDK code. This is the moat — currently invisible in the portal.</div>
+          </div>
+          <div class="funnel-card" style="margin-bottom:0;">
+            <div class="funnel-card-title" style="font-size:12px;">🔄 Chat → IDE handoff (Copilot → Context Plugin)</div>
+            <div class="funnel-card-desc" style="margin-bottom:0;">Nobody in the table sequences discover-in-docs → take-to-IDE. Postman generates tests and Stripe executes actions, but neither creates a sequential discovery-to-install funnel. Genuinely new pattern.</div>
+          </div>
+          <div class="funnel-card" style="margin-bottom:0;">
+            <div class="funnel-card-title" style="font-size:12px;">🌐 Horizontal (any customer API)</div>
+            <div class="funnel-card-desc" style="margin-bottom:0;">Stripe, Supabase, Cloudflare are first-party tools. APIMatic ships this capability across all customer APIs simultaneously — a platform advantage no single-company tool can replicate.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations-bar" style="grid-template-columns: 1fr 1fr;">
+      <div class="annotation">
+        <div class="ann-num">7</div>
+        <div class="ann-text"><strong>Priority gap: MCP Server</strong> — 10 of 17 competitors have it. If APIMatic doesn't, this is a baseline credibility gap visible in any side-by-side evaluation. Should close in parallel with — not after — the chat-first portal ships.</div>
+      </div>
+      <div class="annotation">
+        <div class="ann-num">8</div>
+        <div class="ann-text"><strong>Quality gate before homepage placement</strong> — every competitor's AI lives in a sidebar where a bad answer is tolerable. Front-page placement raises the cost of a weak answer from "meh" to "first impression failure." Orchestration benchmark must land before or with this feature.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-footer">APIMatic — API Copilot Chat-First Portal · Wireframe v2 · 2026-05-11 · Internal only</div>
+
+</div>
+</body>
+</html>
